@@ -1,159 +1,558 @@
-AI Assessment Tracking Assistant — System Architecture
+# Architecture Layout — AI Assessment Tracking Assistant
 
-1. Overview
+## System Overview
 
-The AI Assessment Tracking Assistant is a system designed to help students manage academic workloads by tracking assessments, prioritizing tasks, generating study schedules, and sending intelligent reminders.
+The AI Assessment Tracking Assistant is a cloud-ready academic workload management platform designed to help students manage assessments, deadlines, prioritization, and study planning using AI and machine learning.
 
-The system is built using a layered architecture consisting of:
+The system follows a **layered modular architecture**.
 
-Client Layer
-Backend/Application Layer
-AI/ML Services Layer
-Data Layer
-External Services Layer
+The architecture contains:
 
-2. System Architecture Layers
+1. Client Layer
+2. Backend/API Layer
+3. Application Services Layer
+4. Machine Learning Layer
+5. Data Layer
+6. External Services Layer
 
-2.1 Client Layer
+---
 
-The client layer provides user access through web and mobile applications.
+# High-Level Architecture Diagram
 
-Components:
-Web Application (React / Next.js)
-Mobile Application (Flutter / React Native)
-Responsibilities:
-Add and view assessments
-View dashboard and progress
-Receive notifications and recommendations
-Sync calendar and email data
+```txt
+┌───────────────────────────────────────────────────────────┐
+│                     CLIENT LAYER                          │
+└───────────────────────────────────────────────────────────┘
 
-2.2 Backend / API Gateway Layer
+    Web Application (Next.js)
+            │
+            │ HTTPS / REST API
+            ▼
 
-This layer acts as the central communication hub between client and services.
+┌───────────────────────────────────────────────────────────┐
+│                 BACKEND / API LAYER                       │
+└───────────────────────────────────────────────────────────┘
 
-Components:
-API Gateway / Backend Server
-Responsibilities:
-Authentication and authorization
-Request routing
-Input validation
-Rate limiting
-Communication with internal services
+        Laravel API Server
 
-2.3 Application & AI Services Layer
+        • Authentication
+        • Authorization
+        • Request Validation
+        • Rate Limiting
+        • API Routing
+        • Queue Management
 
-This is the core logic layer of the system.
+            │
+            │ Internal Service Calls
+            ▼
 
-2.3.1 User Service
-Manages user profiles
-Stores preferences and settings
+┌───────────────────────────────────────────────────────────┐
+│              APPLICATION SERVICES LAYER                   │
+└───────────────────────────────────────────────────────────┘
 
-2.3.2 Assessment Service
-Handles creation and updates of assessments
-Tracks deadlines and submission status
+ ┌──────────────────────┐
+ │ User Service         │
+ │ Profiles             │
+ │ Preferences          │
+ └──────────────────────┘
 
-2.3.3 Priority Engine (ML-Based)
-Calculates priority scores
-Performs workload analysis
-Predicts deadline risk
+ ┌──────────────────────┐
+ │ Assessment Service   │
+ │ CRUD Operations      │
+ │ Deadline Tracking    │
+ │ Submission Status    │
+ └──────────────────────┘
 
-2.3.4 Schedule Generator
-Generates daily and weekly study plans
-Optimizes time allocation based on workload
+ ┌──────────────────────┐
+ │ Notification Engine  │
+ │ Email Reminders      │
+ │ Push Notifications   │
+ │ Scheduled Jobs       │
+ └──────────────────────┘
 
-2.3.5 Notification Engine
-Sends reminders and alerts
-Supports push and email notifications
-Manages scheduling of notifications
+ ┌──────────────────────┐
+ │ Schedule Generator   │
+ │ Study Planning       │
+ │ Workload Allocation  │
+ └──────────────────────┘
 
-2.4 AI / ML Services Layer
+ ┌──────────────────────┐
+ │ Priority Engine      │
+ │ Urgency Calculation  │
+ │ Risk Scoring         │
+ └──────────────────────┘
 
-This layer enhances intelligence and automation.
+            │
+            │ REST API Requests
+            ▼
 
-Responsibilities:
-Extract assignment details from emails and documents
-Perform NLP-based parsing of syllabi and instructions
-Provide recommendation engine support
-Run lightweight ML models for prediction tasks
+┌───────────────────────────────────────────────────────────┐
+│                 MACHINE LEARNING LAYER                    │
+└───────────────────────────────────────────────────────────┘
 
-2.5 Data Layer
+        FastAPI ML Service
 
-The data layer stores all persistent system information.
+        • Deadline Risk Prediction
+        • Assessment Prioritization
+        • Study Recommendation
+        • NLP Extraction Service
 
-Components:
+            │
+            │ Read / Write Operations
+            ▼
 
-1. PostgreSQL Database
-   Users
-   Assessments
-   Courses
-   Schedules
-   Logs
+┌───────────────────────────────────────────────────────────┐
+│                     DATA LAYER                            │
+└───────────────────────────────────────────────────────────┘
 
-2. Redis Cache / Queue
-   Session storage
-   Background job handling
-   Task queue management
-   Performance caching
+ ┌────────────────────────────┐
+ │ PostgreSQL / MySQL         │
+ │                            │
+ │ Users                      │
+ │ Courses                    │
+ │ Assessments                │
+ │ Study Plans                │
+ │ Notifications              │
+ │ Logs                       │
+ └────────────────────────────┘
 
-3. File Storage
-   Syllabus PDFs
-   Attachments
-   Extracted documents and notes
+ ┌────────────────────────────┐
+ │ Redis Queue                │
+ │ Background Jobs            │
+ │ Reminder Processing        │
+ │ Caching                    │
+ └────────────────────────────┘
 
-2.6 External Services Layer
+ ┌────────────────────────────┐
+ │ File Storage               │
+ │ PDF Uploads                │
+ │ Assignment Documents       │
+ │ Syllabi                    │
+ └────────────────────────────┘
 
-The system integrates with external platforms for extended functionality.
+            │
+            │ Third-Party Integrations
+            ▼
 
-Components:
-Authentication Service
-Firebase Auth / Google OAuth
-Handles secure login and identity management
-Email Service
-Gmail API / Outlook API
-Extracts assignment-related emails and updates
-Calendar Service
+┌───────────────────────────────────────────────────────────┐
+│                EXTERNAL SERVICES LAYER                    │
+└───────────────────────────────────────────────────────────┘
+
+Google OAuth
+
 Google Calendar API
-Syncs deadlines and schedules
-AI/ML Models (Optional)
-Open-source ML models (Hugging Face / local models)
-Supports NLP and prediction tasks
-Push Notification Service
+
+Email APIs
+
 Firebase Cloud Messaging
-Sends real-time alerts to users
 
-3. Data Flow
+OpenAI / HuggingFace Models
 
-3.1 Adding an Assessment
+Sentry Monitoring
 
-User submits assessment via app
-Backend processes request
-Assessment Service stores data
-Priority Engine assigns urgency score
-Schedule Generator creates plan
-Notification Engine schedules reminders
+PostHog Analytics
+```
 
-3.2 External Data Ingestion (Email/LMS)
+---
 
-Email Service fetches messages
-AI/ML Service extracts assignment details
-Backend stores structured data
-System updates schedules automatically
+# Component Responsibilities
 
-3.3 Daily User Interaction
+## 1. Client Layer
 
-User opens dashboard
-Backend retrieves tasks and priorities
-AI services generate recommendations
-System displays “Today’s Focus Plan”
+### Technology
 
-4.  Key Design Principles
+Next.js + TailwindCSS
 
-Modular Architecture: Each service operates independently
-Scalability: Services can be scaled separately
-AI-Augmented Decision Making: Prioritization and scheduling are ML-assisted
-Event-Driven Processing: Notifications and updates are triggered automatically
-Cloud-Ready Design: Supports integration with cloud services and APIs
+### Responsibilities
 
-5.  System Goal
+The frontend provides the user interface for:
 
-To reduce missed deadlines, improve academic planning, and help students manage multiple courses efficiently through AI-powered prioritization and scheduling.
+* User registration/login
+* Dashboard viewing
+* Assessment management
+* Progress monitoring
+* Calendar visualization
+* Notification display
+* Study schedule viewing
+
+The application is designed mobile-first because most target users rely primarily on smartphones.
+
+---
+
+## 2. Backend/API Layer
+
+### Technology
+
+Laravel API
+
+### Responsibilities
+
+The backend acts as the central orchestration layer.
+
+Functions include:
+
+* Authentication
+* Authorization
+* API routing
+* Validation
+* Queue handling
+* Business logic coordination
+* Communication with ML service
+
+The backend exposes REST endpoints consumed by the frontend.
+
+---
+
+## 3. Application Services Layer
+
+### User Service
+
+Manages:
+
+* user profiles
+* preferences
+* personalization settings
+
+---
+
+### Assessment Service
+
+Handles:
+
+* assessment creation
+* updates
+* deletion
+* status tracking
+* deadline monitoring
+
+---
+
+### Notification Engine
+
+Schedules:
+
+* 7-day reminders
+* 3-day reminders
+* 1-day reminders
+* deadline-day reminders
+
+Supports:
+
+* email notifications
+* push notifications
+
+---
+
+### Schedule Generator
+
+Creates personalized study plans based on:
+
+* deadline urgency
+* workload level
+* available study time
+
+---
+
+### Priority Engine
+
+Computes assessment importance using:
+
+* deadline proximity
+* assessment weight
+* workload pressure
+* predicted risk score
+
+---
+
+## 4. Machine Learning Layer
+
+### Technology
+
+Python FastAPI + Scikit-learn
+
+The ML layer provides intelligent decision support.
+
+---
+
+### Deadline Risk Prediction
+
+Predicts likelihood of missed submissions.
+
+Inputs:
+
+* days remaining
+* workload level
+* completion history
+* overdue count
+* assessment complexity
+
+Outputs:
+
+Risk score.
+
+Example:
+
+```txt
+Software Engineering Project
+Risk: 84%
+Status: HIGH RISK
+```
+
+---
+
+### Assessment Prioritization
+
+Ranks academic tasks by urgency.
+
+Factors:
+
+* deadline proximity
+* course importance
+* workload intensity
+* historical behavior
+
+---
+
+### Study Recommendation System
+
+Generates adaptive schedules.
+
+Outputs:
+
+daily study plans.
+
+---
+
+### NLP Extraction Service
+
+Extracts assignment details from:
+
+* uploaded PDFs
+* syllabi
+* assignment instructions
+* emails
+
+Performs:
+
+* deadline extraction
+* task classification
+* instruction summarization
+
+---
+
+## 5. Data Layer
+
+### Database
+
+PostgreSQL / MySQL
+
+Stores:
+
+* users
+* courses
+* assessments
+* schedules
+* notifications
+* activity logs
+
+---
+
+### Redis Queue
+
+Supports:
+
+* asynchronous reminder jobs
+* background processing
+* caching
+* scheduled task execution
+
+---
+
+### File Storage
+
+Stores:
+
+* syllabus PDFs
+* uploaded files
+* extracted documents
+
+---
+
+## 6. External Services Layer
+
+### Authentication
+
+Google OAuth.
+
+---
+
+### Calendar Integration
+
+Google Calendar API.
+
+Syncs deadlines automatically.
+
+---
+
+### Email Integration
+
+Extracts assignment-related communication.
+
+---
+
+### Notifications
+
+Firebase Cloud Messaging.
+
+---
+
+### Monitoring
+
+Sentry.
+
+Tracks:
+
+* backend errors
+* API failures
+* production issues
+
+---
+
+### Analytics
+
+PostHog.
+
+Tracks:
+
+* sessions
+* feature usage
+* engagement metrics
+
+---
+
+# System Data Flows
+
+## Flow 1 — Assessment Creation
+
+1. Student submits assessment.
+
+2. Frontend sends request to Laravel API.
+
+3. Backend validates request.
+
+4. Assessment Service stores data.
+
+5. Priority Engine calculates score.
+
+6. ML Service predicts risk level.
+
+7. Notification Engine schedules reminders.
+
+8. Database stores final state.
+
+---
+
+## Flow 2 — Assignment Extraction
+
+1. User uploads syllabus PDF.
+
+2. Backend forwards file to ML Service.
+
+3. NLP extraction model processes content.
+
+4. Deadline and instructions extracted.
+
+5. Structured assessment data created.
+
+6. Database updated automatically.
+
+---
+
+## Flow 3 — Daily User Dashboard
+
+1. User opens dashboard.
+
+2. Frontend requests dashboard data.
+
+3. Backend fetches:
+
+* pending tasks
+* overdue tasks
+* schedules
+* risk scores
+
+4. ML service generates recommendations.
+
+5. Dashboard displays:
+
+Today's Focus Plan.
+
+---
+
+# Deployment Architecture
+
+Frontend:
+
+Vercel Free Tier
+
+Backend:
+
+Render Free Tier
+
+ML Service:
+
+Render Python Service
+
+Database:
+
+Supabase PostgreSQL / MySQL
+
+Queue:
+
+Upstash Redis
+
+Monitoring:
+
+Sentry Free Tier
+
+Analytics:
+
+PostHog Free Tier
+
+---
+
+# Design Principles
+
+## Modular Design
+
+Services remain independently scalable.
+
+---
+
+## AI-Augmented Decisions
+
+Machine learning assists prioritization and prediction.
+
+---
+
+## Event-Driven Processing
+
+Notifications and reminders operate asynchronously.
+
+---
+
+## Cloud-Ready Deployment
+
+Supports containerized and service-based deployment.
+
+---
+
+## Mobile-First User Experience
+
+Designed for African students primarily using smartphones.
+
+---
+
+# System Goal
+
+Reduce missed deadlines, improve academic planning, and provide personalized academic workload management using intelligent automation and machine learning.
