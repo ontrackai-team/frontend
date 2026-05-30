@@ -167,13 +167,13 @@ Next.js + TailwindCSS
 
 The frontend provides the user interface for:
 
-* User registration/login
-* Dashboard viewing
-* Assessment management
-* Progress monitoring
-* Calendar visualization
-* Notification display
-* Study schedule viewing
+- User registration/login
+- Dashboard viewing
+- Assessment management
+- Progress monitoring
+- Calendar visualization
+- Notification display
+- Study schedule viewing
 
 The application is designed mobile-first because most target users rely primarily on smartphones.
 
@@ -191,13 +191,13 @@ The backend acts as the central orchestration layer.
 
 Functions include:
 
-* Authentication
-* Authorization
-* API routing
-* Validation
-* Queue handling
-* Business logic coordination
-* Communication with ML service
+- Authentication
+- Authorization
+- API routing
+- Validation
+- Queue handling
+- Business logic coordination
+- Communication with ML service
 
 The backend exposes REST endpoints consumed by the frontend.
 
@@ -209,9 +209,9 @@ The backend exposes REST endpoints consumed by the frontend.
 
 Manages:
 
-* user profiles
-* preferences
-* personalization settings
+- user profiles
+- preferences
+- personalization settings
 
 ---
 
@@ -219,11 +219,11 @@ Manages:
 
 Handles:
 
-* assessment creation
-* updates
-* deletion
-* status tracking
-* deadline monitoring
+- assessment creation
+- updates
+- deletion
+- status tracking
+- deadline monitoring
 
 ---
 
@@ -231,15 +231,15 @@ Handles:
 
 Schedules:
 
-* 7-day reminders
-* 3-day reminders
-* 1-day reminders
-* deadline-day reminders
+- 7-day reminders
+- 3-day reminders
+- 1-day reminders
+- deadline-day reminders
 
 Supports:
 
-* email notifications
-* push notifications
+- email notifications
+- push notifications
 
 ---
 
@@ -247,9 +247,9 @@ Supports:
 
 Creates personalized study plans based on:
 
-* deadline urgency
-* workload level
-* available study time
+- deadline urgency
+- workload level
+- available study time
 
 ---
 
@@ -257,10 +257,10 @@ Creates personalized study plans based on:
 
 Computes assessment importance using:
 
-* deadline proximity
-* assessment weight
-* workload pressure
-* predicted risk score
+- deadline proximity
+- assessment weight
+- workload pressure
+- predicted risk score
 
 ---
 
@@ -280,11 +280,11 @@ Predicts likelihood of missed submissions.
 
 Inputs:
 
-* days remaining
-* workload level
-* completion history
-* overdue count
-* assessment complexity
+- days remaining
+- workload level
+- completion history
+- overdue count
+- assessment complexity
 
 Outputs:
 
@@ -306,10 +306,10 @@ Ranks academic tasks by urgency.
 
 Factors:
 
-* deadline proximity
-* course importance
-* workload intensity
-* historical behavior
+- deadline proximity
+- course importance
+- workload intensity
+- historical behavior
 
 ---
 
@@ -327,16 +327,16 @@ daily study plans.
 
 Extracts assignment details from:
 
-* uploaded PDFs
-* syllabi
-* assignment instructions
-* emails
+- uploaded PDFs
+- syllabi
+- assignment instructions
+- emails
 
 Performs:
 
-* deadline extraction
-* task classification
-* instruction summarization
+- deadline extraction
+- task classification
+- instruction summarization
 
 ---
 
@@ -348,12 +348,12 @@ PostgreSQL / MySQL
 
 Stores:
 
-* users
-* courses
-* assessments
-* schedules
-* notifications
-* activity logs
+- users
+- courses
+- assessments
+- schedules
+- notifications
+- activity logs
 
 ---
 
@@ -361,10 +361,10 @@ Stores:
 
 Supports:
 
-* asynchronous reminder jobs
-* background processing
-* caching
-* scheduled task execution
+- asynchronous reminder jobs
+- background processing
+- caching
+- scheduled task execution
 
 ---
 
@@ -372,9 +372,9 @@ Supports:
 
 Stores:
 
-* syllabus PDFs
-* uploaded files
-* extracted documents
+- syllabus PDFs
+- uploaded files
+- extracted documents
 
 ---
 
@@ -412,9 +412,9 @@ Sentry.
 
 Tracks:
 
-* backend errors
-* API failures
-* production issues
+- backend errors
+- API failures
+- production issues
 
 ---
 
@@ -424,9 +424,9 @@ PostHog.
 
 Tracks:
 
-* sessions
-* feature usage
-* engagement metrics
+- sessions
+- feature usage
+- engagement metrics
 
 ---
 
@@ -476,10 +476,10 @@ Tracks:
 
 3. Backend fetches:
 
-* pending tasks
-* overdue tasks
-* schedules
-* risk scores
+- pending tasks
+- overdue tasks
+- schedules
+- risk scores
 
 4. ML service generates recommendations.
 
