@@ -1,4 +1,4 @@
-import { getHealth, getRoot, getAssessments } from "../api/api.js";
+import { getHealth, getRoot, getAssessments } from "../services/api";
 
 async function testAPI() {
     try {

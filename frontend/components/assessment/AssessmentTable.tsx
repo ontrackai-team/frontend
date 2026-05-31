@@ -1,44 +1,42 @@
-import { Assessment } from "@/types/assessment";
-import StatusBadge from "./StatusBadge";
+import { deleteAssessment } from "@/services/api";
 
-type Props = {
-  assessments: Assessment[];
-};
+export default function AssessmentTable({ assessments, onDelete }: any) {
+  const handleDelete = async (id: string) => {
+    await deleteAssessment(id);
+    onDelete(); // refresh list after delete
+  };
 
-export default function AssessmentTable({
-  assessments,
-}: Props) {
   return (
-    <div className="overflow-x-auto bg-white rounded-xl shadow">
-      <table className="w-full">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="p-4 text-left">Title</th>
-            <th className="p-4 text-left">Course</th>
-            <th className="p-4 text-left">Weight</th>
-            <th className="p-4 text-left">Due Date</th>
-            <th className="p-4 text-left">Status</th>
-          </tr>
-        </thead>
+    <table className="w-full border">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Course</th>
+          <th>Weight</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
 
-        <tbody>
-          {assessments.map((assessment) => (
-            <tr key={assessment.id} className="border-t">
-              <td className="p-4">{assessment.title}</td>
-              <td className="p-4">{assessment.course}</td>
-              <td className="p-4">{assessment.weight}%</td>
-              <td className="p-4">
-                {new Date(
-                  assessment.due_date
-                ).toLocaleDateString()}
-              </td>
-              <td className="p-4">
-                <StatusBadge status={assessment.status} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+      <tbody>
+        {assessments.map((a: any) => (
+          <tr key={a.id} className="border-t">
+            <td>{a.title}</td>
+            <td>{a.course}</td>
+            <td>{a.weight}</td>
+            <td>{a.status}</td>
+
+            <td>
+              <button
+                onClick={() => handleDelete(a.id)}
+                className="text-red-500"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }

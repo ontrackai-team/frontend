@@ -1,15 +1,25 @@
+"use client";
+
+import { useAssessments } from "@/hooks/useAssessments";
+import AddAssessmentForm from "@/components/assessment/AddAssessmentForm";
 import AssessmentTable from "@/components/assessment/AssessmentTable";
-import { mockAssessments } from "@/data/mockAssessments";
 
 export default function AssessmentsPage() {
-  return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">
-        Assessments
-      </h1>
+  const { assessments, loading, fetchAssessments } = useAssessments();
 
+  if (loading) return <p>Loading...</p>;
+
+  return (
+    <div className="p-6 space-y-6">
+      <h1 className="text-3xl font-bold">Assessments</h1>
+
+      {/* ADD FORM */}
+      <AddAssessmentForm onSuccess={fetchAssessments} />
+
+      {/* TABLE */}
       <AssessmentTable
-        assessments={mockAssessments}
+        assessments={assessments}
+        onDelete={fetchAssessments}
       />
     </div>
   );
