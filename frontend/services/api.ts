@@ -1,9 +1,10 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:8000"
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "https://ontrackai.onrender.com"
 });
 
+// Example endpoints
 export const getHealth = () => API.get("/health");
 
 export const getRoot = () => API.get("/");
@@ -18,3 +19,5 @@ export const createAssessment = (data: any) =>
 
 export const deleteAssessment = (id: string) =>
   API.delete(`/assessments/${id}`);
+
+export default API;
