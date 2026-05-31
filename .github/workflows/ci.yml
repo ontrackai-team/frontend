@@ -1,0 +1,17 @@
+name: CI
+
+#Triggers this workflow whenever someone makes a pull request to the main branch
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest   #Runs the tests on a fresh Linux computer in the GITHUB cloud
+    steps:
+      - uses: actions/checkout@v3     #Downloads your code onto that Linux computer
+      - uses: actions/setup-python@v4    #Installs Python on that Linux computer.
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt     #Installs all your project dependencies
+      - run: python -m pytest test_API.py    #Runs your tests, letting us know when something does not work
