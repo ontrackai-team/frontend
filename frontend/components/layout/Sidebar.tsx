@@ -8,10 +8,13 @@ export default function Sidebar() {
   const { logout } = useAuth();
   const router = useRouter();
 
-  const handleLogout = () => {
-    logout();
-    router.push("/login");
-  };
+const handleLogout = () => {
+  const confirmLogout = confirm("Are you sure you want to logout?");
+  if (!confirmLogout) return;
+
+  logout();
+  router.push("/");
+};
 
   return (
     <aside className="w-64 h-screen bg-slate-900 text-white flex flex-col p-5">
@@ -38,12 +41,7 @@ export default function Sidebar() {
         >
           Schedules
         </Link>
-        <Link
-          href="/settings"
-          className="p-3 rounded hover:bg-slate-700"
-        >
-          Settings
-        </Link>
+        
 
         
 
@@ -52,6 +50,12 @@ export default function Sidebar() {
           className="p-3 rounded hover:bg-slate-700"
         >
           AI Chat
+        </Link>
+        <Link
+          href="/settings"
+          className="p-3 rounded hover:bg-slate-700"
+        >
+          Settings
         </Link>
       </nav>
 
