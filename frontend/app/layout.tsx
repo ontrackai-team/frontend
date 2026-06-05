@@ -1,6 +1,6 @@
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import Sidebar from "@/components/layout/Sidebar";
+import { AuthProvider } from "@/context/AuthContext";
+import Navbar from "@/components/Navbar";
 
 export default function RootLayout({
   children,
@@ -9,16 +9,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-gray-100">
-        <Navbar />
-
-        <div className="flex">
-          <Sidebar />
-
-          <main className="flex-1">
-            {children}
-          </main>
-        </div>
+      <body>
+        <AuthProvider>
+          <Navbar />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
