@@ -21,7 +21,7 @@ export default function LoginPage() {
     try {
       const res: any = await loginUser({ email, password });
       login(res.access_token);
-      router.push("/chat");
+      router.push("/dashboard");
     } catch {
       setError("Login failed");
     }
@@ -31,6 +31,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col items-center mt-20 gap-3">
+      
       <h1 className="text-2xl font-bold">Login</h1>
 
       <input

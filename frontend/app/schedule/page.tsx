@@ -1,19 +1,25 @@
 "use client";
 
 import { useAssessments } from "@/hooks/useAssessments";
+import AppLayout from "@/components/layout/AppLayout";
 
 export default function SchedulePage() {
   const { assessments, loading } = useAssessments();
+  
 
   if (loading) {
-    return (
+    return ( <AppLayout>
+      
       <div className="p-6">
         <p>Loading schedule...</p>
       </div>
+      </AppLayout>
     );
   }
 
   return (
+    <AppLayout>
+    
     <div className="p-6 space-y-6">
       <div>
         <h1 className="text-3xl font-bold">
@@ -102,5 +108,6 @@ export default function SchedulePage() {
         </div>
       </div>
     </div>
+    </AppLayout>
   );
 }

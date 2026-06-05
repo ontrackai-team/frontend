@@ -1,26 +1,26 @@
 "use client";
 
 import { useState } from "react";
+import AppLayout from "@/components/layout/AppLayout";
 
 export default function SettingsPage() {
   const [darkMode, setDarkMode] = useState(false);
 
   return (
-    <div
-      className={`p-6 space-y-6 min-h-screen ${
-        darkMode
-          ? "bg-gray-900 text-white"
-          : "bg-gray-100 text-black"
+   
+    <AppLayout>
+  <div
+    className={`p-6 space-y-6 min-h-screen ${
+      darkMode
+        ? "bg-gray-900 text-white"
+        : "bg-gray-100 text-black"
+    }`}
+  >
+      <div
+      className={`p-6 rounded-xl shadow ${
+        darkMode ? "bg-gray-800" : "bg-white"
       }`}
     >
-      <h1 className="text-3xl font-bold">Settings</h1>
-
-      {/* Notifications */}
-      <div
-        className={`p-6 rounded-xl shadow ${
-          darkMode ? "bg-gray-800" : "bg-white"
-        }`}
-      >
         <h2 className="text-xl font-semibold mb-4">
           Notifications
         </h2>
@@ -42,13 +42,14 @@ export default function SettingsPage() {
           </label>
         </div>
       </div>
+        
 
-      {/* AI Preferences */}
-      <div
-        className={`p-6 rounded-xl shadow ${
-          darkMode ? "bg-gray-800" : "bg-white"
-        }`}
-      >
+         {/* AI Preferences */}
+    <div
+      className={`p-6 rounded-xl shadow ${
+        darkMode ? "bg-gray-800" : "bg-white"
+      }`}
+    >
         <h2 className="text-xl font-semibold mb-4">
           AI Preferences
         </h2>
@@ -70,6 +71,7 @@ export default function SettingsPage() {
           </label>
         </div>
       </div>
+        
 
       {/* Appearance */}
       <div
@@ -113,6 +115,8 @@ export default function SettingsPage() {
           </button>
         </div>
       </div>
-    </div>
+      
+        </div>
+    </AppLayout>
   );
 }

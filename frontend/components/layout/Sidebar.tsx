@@ -26,6 +26,26 @@ export default function Sidebar() {
         >
           Dashboard
         </Link>
+            <Link
+          href="/assessments"
+          className="p-3 rounded hover:bg-slate-700"
+        >
+          Assessments
+        </Link>
+        <Link
+          href="/schedule"
+          className="p-3 rounded hover:bg-slate-700"
+        >
+          Schedules
+        </Link>
+        <Link
+          href="/settings"
+          className="p-3 rounded hover:bg-slate-700"
+        >
+          Settings
+        </Link>
+
+        
 
         <Link
           href="/chat"

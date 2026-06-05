@@ -1,8 +1,10 @@
+
 "use client";
 
 import { useState } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { sendMessage } from "@/services/chatService";
+import AppLayout from "@/components/layout/AppLayout";
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<any[]>([]);
@@ -32,9 +34,15 @@ export default function ChatPage() {
     setLoading(false);
   };
 
-  return (
-    <ProtectedRoute>
-      <div className="p-6">
+
+ return (
+  <ProtectedRoute>
+    <AppLayout>
+      <div className="flex h-screen">
+     
+
+      <main className="flex-1 p-6">
+      
         <h1 className="text-xl font-bold mb-4">
           AI Chat
         </h1>
@@ -67,7 +75,11 @@ export default function ChatPage() {
             Send
           </button>
         </div>
-      </div>
-    </ProtectedRoute>
-  );
+    
+          </main>
+    </div>
+    </AppLayout>
+  </ProtectedRoute>
+);
+  
 }

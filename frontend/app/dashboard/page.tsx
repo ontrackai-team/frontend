@@ -1,13 +1,13 @@
 "use client";
 
 import ProtectedRoute from "@/components/ProtectedRoute";
-import Sidebar from "@/components/Sidebar";
+import AppLayout from "@/components/layout/AppLayout";
 
 export default function DashboardPage() {
   return (
     <ProtectedRoute>
-      <div className="flex">
-        <Sidebar />
+    
+      <AppLayout>
 
         <main className="flex-1 p-8">
           <h1 className="text-3xl font-bold">
@@ -34,7 +34,7 @@ export default function DashboardPage() {
             </div>
           </div>
         </main>
-      </div>
+      </AppLayout>
     </ProtectedRoute>
   );
 }

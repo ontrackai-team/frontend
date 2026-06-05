@@ -1,62 +1,31 @@
-export default function Home() {
+import Link from "next/link";
+
+export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      
+    <div className="flex flex-col items-center justify-center min-h-screen gap-6">
+      <h1 className="text-4xl font-bold">
+        Welcome to OnTrackAI
+      </h1>
 
-      <main className="max-w-5xl mx-auto p-6 mt-10">
-        
-        {/* Header Section */}
-        <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold text-gray-800">
-            Welcome to AI Assessment Tracking Assistant
-          </h1>
+      <p className="text-gray-600">
+        AI-powered study assistant for students
+      </p>
 
-          <p className="mt-3 text-gray-600">
-            Track your assignments, deadlines, and academic workload efficiently with AI support.
-          </p>
-        </div>
+      <div className="flex gap-4">
+        <Link
+          href="/login"
+          className="px-4 py-2 bg-blue-500 text-white rounded"
+        >
+          Login
+        </Link>
 
-        {/* System Description Cards */}
-        <div className="grid gap-5 sm:grid-cols-2">
-
-          <div className="p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-            <h2 className="text-lg font-semibold text-gray-800">
-              📚 Assignment Tracking
-            </h2>
-            <p className="mt-2 text-sm text-gray-600">
-              Organize all your assignments in one place and avoid missing important academic tasks across courses.
-            </p>
-          </div>
-
-          <div className="p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-            <h2 className="text-lg font-semibold text-gray-800">
-              ⏰ Deadline Management
-            </h2>
-            <p className="mt-2 text-sm text-gray-600">
-              Stay updated with upcoming deadlines and manage your time effectively to reduce last-minute stress.
-            </p>
-          </div>
-
-          <div className="p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-            <h2 className="text-lg font-semibold text-gray-800">
-              📊 Progress Tracker
-            </h2>
-            <p className="mt-2 text-sm text-gray-600">
-              Visualize your academic progress and understand how much work is completed vs remaining.
-            </p>
-          </div>
-
-          <div className="p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-            <h2 className="text-lg font-semibold text-gray-800">
-              🤖 AI Suggestions
-            </h2>
-            <p className="mt-2 text-sm text-gray-600">
-              Get intelligent recommendations to improve productivity and manage workload more efficiently.
-            </p>
-          </div>
-
-        </div>
-      </main>
+        <Link
+          href="/register"
+          className="px-4 py-2 bg-green-500 text-white rounded"
+        >
+          Register
+        </Link>
+      </div>
     </div>
   );
 }

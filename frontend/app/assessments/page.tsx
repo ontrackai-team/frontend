@@ -3,6 +3,7 @@
 import { useAssessments } from "@/hooks/useAssessments";
 import AddAssessmentForm from "@/components/assessment/AddAssessmentForm";
 import AssessmentTable from "@/components/assessment/AssessmentTable";
+import AppLayout from "@/components/layout/AppLayout";
 
 export default function AssessmentsPage() {
   const { assessments, loading, fetchAssessments } = useAssessments();
@@ -10,7 +11,7 @@ export default function AssessmentsPage() {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="p-6 space-y-6">
+    <AppLayout>
       <h1 className="text-3xl font-bold">Assessments</h1>
 
       {/* ADD FORM */}
@@ -21,6 +22,6 @@ export default function AssessmentsPage() {
         assessments={assessments}
         onDelete={fetchAssessments}
       />
-    </div>
+    </AppLayout>
   );
 }
