@@ -6,6 +6,7 @@ from passlib.context import CryptContext
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 #reads your .env file so Python can access your MongoDB URL
 load_dotenv()
@@ -41,6 +42,14 @@ class UserLogin(BaseModel):
 OnTrackAI = FastAPI (title = "AI Assessment Assistant")
 
 assessments = []
+
+OnTrackAI.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 #creating endpoint that returns a message when our URL is visited indicating it is live
 @OnTrackAI.get("/")
