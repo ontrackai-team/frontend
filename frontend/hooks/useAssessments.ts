@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getAssessments } from "@/services/api";
+import getAssessments from "@/services/assessmentService";
 
 export function useAssessments() {
   const [assessments, setAssessments] =
