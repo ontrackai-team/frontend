@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { createAssessment } from "@/services/api";
+import { createAssessment } from "@/services/assessmentService";
 
 export default function AddAssessmentForm({ onSuccess }: any) {
   const [form, setForm] = useState({

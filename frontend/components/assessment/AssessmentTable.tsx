@@ -1,4 +1,4 @@
-import { deleteAssessment } from "@/services/api";
+import { deleteAssessment } from "@/services/assessmentService";
 
 export default function AssessmentTable({
   assessments,

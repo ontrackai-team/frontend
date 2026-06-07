@@ -28,7 +28,7 @@ export default function ChatPage() {
 
     setMessages((prev) => [
       ...prev,
-      { role: "assistant", text: res.reply },
+      { role: "assistant", text: (res as any).reply },
     ]);
 
     setLoading(false);
