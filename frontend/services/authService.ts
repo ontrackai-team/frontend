@@ -1,3 +1,4 @@
+import API from "./api";
 
 export type LoginData = {
   email: string;
@@ -10,33 +11,12 @@ export type RegisterData = {
   password: string;
 };
 
-export const loginUser = (data: LoginData) => {
-  return new Promise<any>((resolve, reject) => {
-    setTimeout(() => {
-      if (data.email && data.password) {
-        resolve({
-          access_token: "mock-token-123",
-          user: {
-            email: data.email,
-          },
-        });
-      } else {
-        reject("Invalid credentials");
-      }
-    }, 1000);
-  });
+export const loginUser = async (data: LoginData) => {
+  const response = await API.post("/login", data);
+  return response.data;
 };
 
-export const registerUser = (data: RegisterData) => {
-  return new Promise<any>((resolve, reject) => {
-    setTimeout(() => {
-      if (data.email && data.password) {
-        resolve({
-          message: "User registered successfully",
-        });
-      } else {
-        reject("Registration failed");
-      }
-    }, 1000);
-  });
+export const registerUser = async (data: RegisterData) => {
+  const response = await API.post("/register", data);
+  return response.data;
 };
