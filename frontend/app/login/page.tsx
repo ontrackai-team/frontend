@@ -18,25 +18,31 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    try {
-      const res: any = await loginUser({ email, password });
-      login(res.access_token);
-      router.push("/dashboard");
-    } catch {
-      setError("Login failed");
+    if (!email || !password) {
+      setError("Please fill all fields");
+      setLoading(false);
+      return;
     }
 
-    setLoading(false);
+    try {
+      const res: any = await loginUser({ email, password });
+      login(res.token);
+      router.push("/dashboard");
+    } catch (err: any) {
+      setError(err?.response?.data?.detail || "Login failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="flex flex-col items-center mt-20 gap-3">
-      
       <h1 className="text-2xl font-bold">Login</h1>
 
       <input
         className="border p-2"
         placeholder="Email"
+        value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
 
@@ -44,6 +50,7 @@ export default function LoginPage() {
         className="border p-2"
         type="password"
         placeholder="Password"
+        value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
 
