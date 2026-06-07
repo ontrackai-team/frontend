@@ -36,32 +36,75 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col items-center mt-20 gap-3">
-      <h1 className="text-2xl font-bold">Login</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white px-4">
+      
+      {/* background glow */}
+      <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.4),transparent_60%)]" />
 
-      <input
-        className="border p-2"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      <div className="relative w-full max-w-md">
+        
+        {/* Card */}
+        <div className="backdrop-blur-xl bg-white/5 border border-white/10 shadow-2xl rounded-2xl p-8">
+          
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold">
+              Welcome back
+            </h1>
+            <p className="text-gray-400 mt-2">
+              Login to continue to your dashboard
+            </p>
+          </div>
 
-      <input
-        className="border p-2"
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+          {/* Email */}
+          <div className="mb-4">
+            <label className="text-sm text-gray-300">Email</label>
+            <input
+              className="mt-1 w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
 
-      {error && <p className="text-red-500">{error}</p>}
+          {/* Password */}
+          <div className="mb-4">
+            <label className="text-sm text-gray-300">Password</label>
+            <input
+              className="mt-1 w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
 
-      <button
-        className="bg-blue-500 text-white px-4 py-2"
-        onClick={handleLogin}
-      >
-        {loading ? "Loading..." : "Login"}
-      </button>
+          {/* Error */}
+          {error && (
+            <div className="mb-4 text-sm text-red-400 bg-red-500/10 border border-red-500/20 px-3 py-2 rounded-lg">
+              {error}
+            </div>
+          )}
+
+          {/* Button */}
+          <button
+            onClick={handleLogin}
+            disabled={loading}
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 font-semibold hover:opacity-90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? "Signing in..." : "Login"}
+          </button>
+
+          {/* Footer */}
+          <p className="text-center text-xs text-gray-500 mt-6">
+            Secure login • OnTrackAI
+          </p>
+        </div>
+
+        {/* floating effects */}
+        <div className="absolute -top-10 -left-10 w-40 h-40 bg-indigo-500/20 blur-3xl rounded-full" />
+        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-cyan-500/20 blur-3xl rounded-full" />
+      </div>
     </div>
   );
 }
