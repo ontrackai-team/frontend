@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { getAssessments } from "@/services/api";
-import { normalizeAssessment } from "@/utils/normalizeAssessment";
 
 export function useAssessments() {
-  const [assessments, setAssessments] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [assessments, setAssessments] =
+    useState<any[]>([]);
+  const [loading, setLoading] =
+    useState<boolean>(true);
 
   const fetchAssessments = async () => {
     setLoading(true);
@@ -14,11 +15,13 @@ export function useAssessments() {
     try {
       const res = await getAssessments();
 
-      const data = Array.isArray(res.data) ? res.data : [];
+      const data = Array.isArray(res.data)
+        ? res.data
+        : [];
 
-      setAssessments(data.map(normalizeAssessment));
+      setAssessments(data);
     } catch (err) {
-      console.log("Backend not available yet", err);
+      console.error(err);
       setAssessments([]);
     } finally {
       setLoading(false);
@@ -29,5 +32,9 @@ export function useAssessments() {
     fetchAssessments();
   }, []);
 
-  return { assessments, loading, fetchAssessments };
+  return {
+    assessments,
+    loading,
+    fetchAssessments,
+  };
 }

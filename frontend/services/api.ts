@@ -7,29 +7,16 @@ const API = axios.create({
 });
 
 API.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("token");
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    if (token) {
+      config.headers = config.headers ?? {};
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
   }
 
   return config;
 });
-
-export const getHealth = () => API.get("/health");
-
-export const getRoot = () => API.get("/");
-
-export const getAssessments = () =>
-  API.get("/assessments");
-
-export const getAssessmentById = (id: string) =>
-  API.get(`/assessments/${id}`);
-
-export const createAssessment = (data: any) =>
-  API.post("/assessments", data);
-
-export const deleteAssessment = (id: string) =>
-  API.delete(`/assessments/${id}`);
 
 export default API;
