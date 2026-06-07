@@ -13,13 +13,15 @@ export default function ProtectedRoute({
   const router = useRouter();
   const pathname = usePathname();
 
-  useEffect(() => {
-    const publicRoutes = ["/", "/login", "/register"];
+  const publicRoutes = ["/", "/login", "/register"];
 
+  useEffect(() => {
     if (!user && !publicRoutes.includes(pathname)) {
       router.push("/login");
     }
   }, [user, pathname]);
 
-  return user ? children : null;
+  return user || publicRoutes.includes(pathname) ? (
+    children
+  ) : null;
 }
