@@ -11,8 +11,11 @@ export default function DashboardPage() {
     return (
       <ProtectedRoute>
         <AppLayout>
-          <main className="flex-1 p-8">
-            <p>Loading dashboard...</p>
+          <main className="flex-1 flex items-center justify-center">
+            <div className="text-center">
+              <div className="h-10 w-10 mx-auto mb-4 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
+              <p className="text-slate-400">Loading dashboard...</p>
+            </div>
           </main>
         </AppLayout>
       </ProtectedRoute>
@@ -40,115 +43,117 @@ export default function DashboardPage() {
   }).length;
 
   const progress =
-    total === 0
-      ? 0
-      : Math.round((submitted / total) * 100);
+    total === 0 ? 0 : Math.round((submitted / total) * 100);
 
   return (
     <ProtectedRoute>
       <AppLayout>
-        <main className="flex-1 p-8 space-y-6">
+        <main className="flex-1 p-8 space-y-8 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 min-h-screen text-white">
+
+          {/* Header */}
           <div>
-            <h1 className="text-3xl font-bold">
+            <h1 className="text-4xl font-bold tracking-tight">
               Dashboard
             </h1>
 
-            <p className="text-gray-600 mt-2">
-              Track your academic workload and deadlines.
+            <p className="text-slate-400 mt-2">
+              Track your academic workload, deadlines, and progress with AI insights.
             </p>
           </div>
 
+          {/* KPI Cards */}
           <div className="grid gap-6 md:grid-cols-4">
-            <div className="bg-white rounded-xl shadow p-6">
-              <p className="text-gray-500 text-sm">
-                Total Assessments
-              </p>
 
-              <h2 className="text-3xl font-bold mt-2">
-                {total}
-              </h2>
+            <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 hover:scale-[1.02] transition">
+              <p className="text-slate-400 text-sm">Total Assessments</p>
+              <h2 className="text-3xl font-bold mt-2">{total}</h2>
             </div>
 
-            <div className="bg-white rounded-xl shadow p-6">
-              <p className="text-gray-500 text-sm">
-                Pending Tasks
-              </p>
-
-              <h2 className="text-3xl font-bold mt-2">
+            <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 hover:scale-[1.02] transition">
+              <p className="text-slate-400 text-sm">Pending Tasks</p>
+              <h2 className="text-3xl font-bold mt-2 text-yellow-400">
                 {pending}
               </h2>
             </div>
 
-            <div className="bg-white rounded-xl shadow p-6">
-              <p className="text-gray-500 text-sm">
-                Upcoming Deadlines
-              </p>
-
-              <h2 className="text-3xl font-bold mt-2">
+            <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 hover:scale-[1.02] transition">
+              <p className="text-slate-400 text-sm">Upcoming Deadlines</p>
+              <h2 className="text-3xl font-bold mt-2 text-orange-400">
                 {upcoming}
               </h2>
             </div>
 
-            <div className="bg-white rounded-xl shadow p-6">
-              <p className="text-gray-500 text-sm">
-                Completion Rate
-              </p>
-
-              <h2 className="text-3xl font-bold mt-2">
+            <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 hover:scale-[1.02] transition">
+              <p className="text-slate-400 text-sm">Completion Rate</p>
+              <h2 className="text-3xl font-bold mt-2 text-green-400">
                 {progress}%
               </h2>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow p-6">
+          {/* Assessments */}
+          <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6">
             <h2 className="text-xl font-semibold mb-4">
               Assessment Overview
             </h2>
 
             {assessments.length === 0 ? (
-              <p className="text-gray-500">
+              <div className="text-slate-400 text-sm">
                 No assessments added yet.
-              </p>
+              </div>
             ) : (
               <div className="space-y-3">
-                {assessments
-                  .slice(0, 5)
-                  .map((assessment: any) => (
-                    <div
-                      key={assessment.id}
-                      className="border rounded-lg p-4"
-                    >
-                      <h3 className="font-semibold">
-                        {assessment.title}
-                      </h3>
+                {assessments.slice(0, 5).map((assessment: any) => (
+                  <div
+                    key={assessment.id}
+                    className="group rounded-xl border border-white/10 bg-white/5 p-4 hover:bg-white/10 transition"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h3 className="font-semibold group-hover:text-indigo-300 transition">
+                          {assessment.title}
+                        </h3>
 
-                      <p className="text-sm text-gray-500">
-                        {assessment.course}
-                      </p>
+                        <p className="text-sm text-slate-400">
+                          {assessment.course}
+                        </p>
 
-                      <p className="text-sm">
-                        Due: {assessment.due_date}
-                      </p>
+                        <p className="text-xs text-slate-500 mt-1">
+                          Due: {assessment.due_date}
+                        </p>
+                      </div>
 
-                      <p className="text-sm">
-                        Status: {assessment.status}
-                      </p>
+                      <span
+                        className={`text-xs px-3 py-1 rounded-full border ${
+                          assessment.status === "submitted"
+                            ? "border-green-500/30 text-green-400 bg-green-500/10"
+                            : "border-yellow-500/30 text-yellow-400 bg-yellow-500/10"
+                        }`}
+                      >
+                        {assessment.status}
+                      </span>
                     </div>
-                  ))}
+                  </div>
+                ))}
               </div>
             )}
           </div>
 
-          <div className="bg-white rounded-xl shadow p-6">
-            <h2 className="text-xl font-semibold mb-4">
+          {/* AI Insights */}
+          <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-r from-indigo-500/10 to-cyan-500/10 backdrop-blur-xl p-6">
+            <h2 className="text-xl font-semibold mb-2">
               AI Insights
             </h2>
 
-            <p className="text-gray-500">
-              AI-generated workload recommendations
-              will appear here.
+            <p className="text-slate-300 text-sm">
+              AI-generated workload recommendations will appear here based on your deadlines and performance trends.
             </p>
+
+            <div className="mt-4 text-xs text-slate-400">
+              ✨ Coming soon: Smart study scheduling + priority predictions
+            </div>
           </div>
+
         </main>
       </AppLayout>
     </ProtectedRoute>
