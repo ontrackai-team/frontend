@@ -1,124 +1,127 @@
 "use client";
 
-import { useState } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import { sendMessage } from "@/services/chatService";
 import AppLayout from "@/components/layout/AppLayout";
 
-export default function ChatPage() {
-  const [messages, setMessages] = useState<any[]>([]);
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
+export default function AIDashboard() {
+  // MOCK DATA
+  const recommendations = [
+    "Focus on Database Systems this week",
+    "Complete frontend integration tasks",
+    "Revise React + Next.js fundamentals",
+  ];
 
-  const handleSend = async () => {
-    if (!input) return;
-
-    const userMsg = input;
-
-    setMessages((prev) => [
-      ...prev,
-      { role: "user", text: userMsg },
-    ]);
-
-    setInput("");
-    setLoading(true);
-
-    const res = await sendMessage(userMsg);
-
-    setMessages((prev) => [
-      ...prev,
-      { role: "assistant", text: (res as any).reply },
-    ]);
-
-    setLoading(false);
+  const timeAnalysis = {
+    availableHours: 12,
+    recommendedHours: 8,
+    message:
+      "You should focus on consistent daily study sessions to stay on track.",
   };
+
+  const notifications = [
+    "Assignment deadline in 2 days",
+    "You have 3 pending assessments",
+    "New AI recommendation available",
+  ];
+
+  const resources = [
+    {
+      title: "React Documentation",
+      url: "https://react.dev",
+    },
+    {
+      title: "Next.js Learn",
+      url: "https://nextjs.org/learn",
+    },
+    {
+      title: "JavaScript Guide (MDN)",
+      url: "https://developer.mozilla.org",
+    },
+  ];
 
   return (
     <ProtectedRoute>
       <AppLayout>
-        <div className="h-screen flex flex-col bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white">
+        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white p-6">
 
           {/* Header */}
-          <div className="px-6 py-4 border-b border-white/10 backdrop-blur-xl bg-white/5">
-            <h1 className="text-2xl font-bold">AI Chat</h1>
-            <p className="text-sm text-slate-400">
-              Ask anything. Get instant AI-powered answers.
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold">🤖 AI Assistant Dashboard</h1>
+            <p className="text-slate-400">
+              Your smart study assistant with insights and recommendations
             </p>
           </div>
 
-          {/* Chat Area */}
-          <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4">
+          {/* GRID */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-            {messages.length === 0 && (
-              <div className="h-full flex items-center justify-center">
-                <div className="text-center max-w-md">
-                  <div className="text-4xl mb-3">🤖</div>
-                  <h2 className="text-xl font-semibold">
-                    Start a conversation
-                  </h2>
-                  <p className="text-slate-400 text-sm mt-2">
-                    Ask your AI study assistant anything about your courses, deadlines, or concepts.
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {messages.map((m, i) => (
-              <div
-                key={i}
-                className={`flex ${
-                  m.role === "user" ? "justify-end" : "justify-start"
-                }`}
-              >
-                <div
-                  className={`max-w-[75%] px-4 py-3 rounded-2xl text-sm leading-relaxed shadow-lg ${
-                    m.role === "user"
-                      ? "bg-gradient-to-r from-indigo-500 to-cyan-500 text-white rounded-br-sm"
-                      : "bg-white/10 border border-white/10 text-slate-200 rounded-bl-sm backdrop-blur-xl"
-                  }`}
-                >
-                  {m.text}
-                </div>
-              </div>
-            ))}
-
-            {loading && (
-              <div className="flex justify-start">
-                <div className="px-4 py-3 rounded-2xl bg-white/10 border border-white/10 text-slate-300 text-sm animate-pulse">
-                  AI is typing...
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Input Area */}
-          <div className="border-t border-white/10 bg-white/5 backdrop-blur-xl p-4">
-            <div className="flex gap-3 items-center">
-
-              <input
-                className="flex-1 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Type your message..."
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleSend();
-                }}
-              />
-
-              <button
-                className="px-5 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-500 font-medium hover:opacity-90 transition disabled:opacity-50"
-                onClick={handleSend}
-              >
-                Send
-              </button>
-
+            {/* Study Recommendations */}
+            <div className="bg-white/5 border border-white/10 p-5 rounded-2xl">
+              <h2 className="text-xl font-semibold mb-3">
+                📊 Study Recommendations
+              </h2>
+              <ul className="space-y-2 text-slate-300">
+                {recommendations.map((item, i) => (
+                  <li key={i}>• {item}</li>
+                ))}
+              </ul>
             </div>
 
-            <p className="text-xs text-slate-500 mt-2 text-center">
-              Press Enter to send • Powered by OnTrackAI
-            </p>
-          </div>
+            {/* Time Analysis */}
+            <div className="bg-white/5 border border-white/10 p-5 rounded-2xl">
+              <h2 className="text-xl font-semibold mb-3">
+                ⏰ Time Analysis
+              </h2>
+              <p className="text-slate-300">
+                Available Hours:{" "}
+                <span className="text-white font-semibold">
+                  {timeAnalysis.availableHours}h
+                </span>
+              </p>
+              <p className="text-slate-300">
+                Recommended Hours:{" "}
+                <span className="text-white font-semibold">
+                  {timeAnalysis.recommendedHours}h
+                </span>
+              </p>
+              <p className="mt-2 text-sm text-slate-400">
+                {timeAnalysis.message}
+              </p>
+            </div>
 
+            {/* Notifications */}
+            <div className="bg-white/5 border border-white/10 p-5 rounded-2xl">
+              <h2 className="text-xl font-semibold mb-3">
+                🔔 Smart Notifications
+              </h2>
+              <ul className="space-y-2 text-slate-300">
+                {notifications.map((item, i) => (
+                  <li key={i}>• {item}</li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Resources */}
+            <div className="bg-white/5 border border-white/10 p-5 rounded-2xl">
+              <h2 className="text-xl font-semibold mb-3">
+                📚 Recommended Resources
+              </h2>
+              <ul className="space-y-2">
+                {resources.map((item, i) => (
+                  <li key={i}>
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      className="text-cyan-400 hover:underline"
+                    >
+                      {item.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+          </div>
         </div>
       </AppLayout>
     </ProtectedRoute>

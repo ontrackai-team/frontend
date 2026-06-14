@@ -98,7 +98,7 @@ export default function Sidebar() {
               size={20}
               className="group-hover:scale-110 transition"
             />
-            AI Chat
+            AI Assistant
           </Link>
 
           <Link
