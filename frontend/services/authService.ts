@@ -1,5 +1,3 @@
-import API from "./api";
-
 export type LoginData = {
   email: string;
   password: string;
@@ -12,11 +10,27 @@ export type RegisterData = {
 };
 
 export const loginUser = async (data: LoginData) => {
-  const response = await API.post("/login", data);
-  return response.data;
+  // Mock login
+  return Promise.resolve({
+    success: true,
+    token: "mock-jwt-token",
+    user: {
+      id: 1,
+      name: "Test User",
+      email: data.email,
+    },
+  });
 };
 
 export const registerUser = async (data: RegisterData) => {
-  const response = await API.post("/register", data);
-  return response.data;
+  // Mock registration
+  return Promise.resolve({
+    success: true,
+    message: "Registration successful",
+    user: {
+      id: 1,
+      name: data.name,
+      email: data.email,
+    },
+  });
 };
