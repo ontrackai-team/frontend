@@ -3,9 +3,32 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.routes.auth import router as auth_router
 from app.routes.schedules import router as schedule_router
+from app.database import client
 
+# =====================
+# CREATE APP FIRST
+# =====================
 app = FastAPI(title="OnTrackAI API")
 
+
+# =====================
+# DB TEST ROUTE
+# =====================
+@app.get("/db-test")
+def db_test():
+    try:
+        client.admin.command("ping")
+        return {"status": "MongoDB connected ✅"}
+    except Exception as e:
+        return {
+            "status": "MongoDB NOT connected ❌",
+            "error": str(e)
+        }
+
+
+# =====================
+# CORS
+# =====================
 origins = [
     "http://localhost:3000",
     "http://localhost:5173",
@@ -20,10 +43,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ✅ ONLY ONE PREFIX SOURCE (main.py controls it)
+
+# =====================
+# ROUTES
+# =====================
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(schedule_router, prefix="/schedules", tags=["Schedules"])
 
+
+# =====================
+# ROOT
+# =====================
 @app.get("/")
 def root():
     return {"message": "OnTrackAI Backend Running 🚀"}
