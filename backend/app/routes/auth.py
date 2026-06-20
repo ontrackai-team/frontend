@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 
 from app.models.user import UserRegister, UserLogin
 from app.database import users_collection
+from app.utils.jwt import create_access_token
 from app.utils.security import (
     hash_password,
     verify_password
@@ -60,6 +61,12 @@ def login(user: UserLogin):
             detail="Invalid credentials"
         )
 
+    token = create_access_token({
+        "user_id": str(db_user["_id"]),
+        "email": db_user["email"]
+    })
+
     return {
-        "message": "Login successful"
+        "access_token": token,
+        "token_type": "bearer"
     }
