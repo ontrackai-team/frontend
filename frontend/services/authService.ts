@@ -1,3 +1,5 @@
+import API_URL from "./api";
+
 export type LoginData = {
   email: string;
   password: string;
@@ -9,28 +11,40 @@ export type RegisterData = {
   password: string;
 };
 
+// LOGIN
 export const loginUser = async (data: LoginData) => {
-  // Mock login
-  return Promise.resolve({
-    success: true,
-    token: "mock-jwt-token",
-    user: {
-      id: 1,
-      name: "Test User",
-      email: data.email,
+  const res = await fetch(`${API_URL}/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify(data),
   });
+
+  const result = await res.json();
+
+  if (!res.ok) {
+    throw new Error(result.detail || "Login failed");
+  }
+
+  return result; // contains JWT token
 };
 
+// REGISTER
 export const registerUser = async (data: RegisterData) => {
-  // Mock registration
-  return Promise.resolve({
-    success: true,
-    message: "Registration successful",
-    user: {
-      id: 1,
-      name: data.name,
-      email: data.email,
+  const res = await fetch(`${API_URL}/auth/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify(data),
   });
+
+  const result = await res.json();
+
+  if (!res.ok) {
+    throw new Error(result.detail || "Registration failed");
+  }
+
+  return result;
 };

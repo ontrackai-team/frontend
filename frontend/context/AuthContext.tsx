@@ -8,8 +8,12 @@ import {
   ReactNode,
 } from "react";
 
+type User = {
+  token: string;
+};
+
 type AuthContextType = {
-  user: { token: string } | null;
+  user: User | null;
   login: (token: string) => void;
   logout: () => void;
 };

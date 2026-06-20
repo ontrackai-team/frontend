@@ -25,8 +25,9 @@ export default function LoginPage() {
     }
 
     try {
-      const res: any = await loginUser({ email, password });
-      login(res.token);
+      const res = await loginUser({ email, password });
+
+login(res.access_token); // IMPORTANT (backend returns this)
       router.push("/dashboard");
     } catch (err: any) {
       setError(err?.response?.data?.detail || "Login failed");
