@@ -4,8 +4,9 @@ import axios from "axios";
 const API = axios.create({
   baseURL:
     process.env.NEXT_PUBLIC_API_URL ||
-    "https://ontrackai.onrender.com",
+    "https://frontend-3rbz.onrender.com",
 });
+ 
 
 // Attach JWT token automatically to every request
 API.interceptors.request.use((config) => {
