@@ -16,7 +16,7 @@ export default function RegisterPage() {
 
   const router = useRouter();
 
-const handleRegister = async () => {
+  const handleRegister = async () => {
   setLoading(true);
   setError("");
 
@@ -26,6 +26,17 @@ const handleRegister = async () => {
     password: form.password,
   };
 
+  // ✅ ADD EMAIL VALIDATION HERE (RIGHT AFTER CLEANING DATA)
+  const isValidEmail = (email: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  if (!isValidEmail(cleanedData.email)) {
+    setError("Invalid email format");
+    setLoading(false);
+    return;
+  }
+
+  // check empty fields
   if (!cleanedData.name || !cleanedData.email || !cleanedData.password) {
     setError("Please fill all fields");
     setLoading(false);
@@ -40,8 +51,10 @@ const handleRegister = async () => {
   } finally {
     setLoading(false);
   }
-    console.log("REGISTER DATA:", form);
+  console.log("REGISTER DATA:", form);
 };
+
+
 
 
   return (
