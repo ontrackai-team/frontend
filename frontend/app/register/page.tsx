@@ -16,29 +16,33 @@ export default function RegisterPage() {
 
   const router = useRouter();
 
-  const handleRegister = async () => {
-    setLoading(true);
-    setError("");
+const handleRegister = async () => {
+  setLoading(true);
+  setError("");
 
-    // validation
-    if (!form.name || !form.email || !form.password) {
-      setError("Please fill all fields");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      await registerUser(form);
-      router.push("/login");
-    } catch (err: any) {
-      setError(
-        err?.response?.data?.detail ||
-        "Registration failed"
-      );
-    } finally {
-      setLoading(false);
-    }
+  const cleanedData = {
+    name: form.name.trim(),
+    email: form.email.trim().toLowerCase(),
+    password: form.password,
   };
+
+  if (!cleanedData.name || !cleanedData.email || !cleanedData.password) {
+    setError("Please fill all fields");
+    setLoading(false);
+    return;
+  }
+
+  try {
+    await registerUser(cleanedData);
+    router.push("/login");
+  } catch (err: any) {
+    setError(err?.message || "Registration failed");
+  } finally {
+    setLoading(false);
+  }
+    console.log("REGISTER DATA:", form);
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white px-4">

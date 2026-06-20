@@ -1,12 +1,11 @@
 import axios from "axios";
 
-// Axios instance (base configuration only)
 const API = axios.create({
-  baseURL:
-    process.env.NEXT_PUBLIC_API_URL ||
-    "https://frontend-3rbz.onrender.com",
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "https://frontend-3rbz.onrender.com",
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
- 
 
 // Attach JWT token automatically to every request
 API.interceptors.request.use((config) => {
