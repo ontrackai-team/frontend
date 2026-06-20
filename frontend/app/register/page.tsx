@@ -26,7 +26,7 @@ export default function RegisterPage() {
     password: form.password,
   };
 
-  // ✅ ADD EMAIL VALIDATION HERE (RIGHT AFTER CLEANING DATA)
+  //  ADD EMAIL VALIDATION HERE
   const isValidEmail = (email: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 

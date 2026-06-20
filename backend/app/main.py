@@ -6,14 +6,12 @@ from app.routes.schedules import router as schedule_router
 
 app = FastAPI(title="OnTrackAI API")
 
-# 🌍 Frontend URLs (Vercel + local dev)
 origins = [
     "http://localhost:3000",
     "http://localhost:5173",
     "https://frontend-black-kappa-17.vercel.app"
 ]
 
-# 🔐 CORS Middleware (IMPORTANT for frontend-backend communication)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -22,13 +20,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 📦 Routers
+# ✅ ONLY ONE PREFIX SOURCE (main.py controls it)
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(schedule_router, prefix="/schedules", tags=["Schedules"])
 
-# 🏠 Health check
 @app.get("/")
 def root():
-    return {
-        "message": "OnTrackAI Backend Running 🚀"
-    }
+    return {"message": "OnTrackAI Backend Running 🚀"}
