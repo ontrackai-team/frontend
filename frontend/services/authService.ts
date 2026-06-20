@@ -1,4 +1,4 @@
-import API_URL from "./api";
+import API from "./api";
 
 export type LoginData = {
   email: string;
@@ -13,38 +13,12 @@ export type RegisterData = {
 
 // LOGIN
 export const loginUser = async (data: LoginData) => {
-  const res = await fetch(`${API_URL}/auth/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  const result = await res.json();
-
-  if (!res.ok) {
-    throw new Error(result.detail || "Login failed");
-  }
-
-  return result; // contains JWT token
+  const res = await API.post("/auth/login", data);
+  return res.data;
 };
 
 // REGISTER
 export const registerUser = async (data: RegisterData) => {
-  const res = await fetch(`${API_URL}/auth/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  const result = await res.json();
-
-  if (!res.ok) {
-    throw new Error(result.detail || "Registration failed");
-  }
-
-  return result;
+  const res = await API.post("/auth/register", data);
+  return res.data;
 };
