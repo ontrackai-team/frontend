@@ -4,8 +4,8 @@ import os
 load_dotenv()
 
 class Settings:
-    MONGODB_URL = os.getenv("MONGODB_URL")
-    DATABASE_NAME = os.getenv("DATABASE_NAME")
-    SECRET_KEY = os.getenv("SECRET_KEY")
+   MONGODB_URL = os.getenv("MONGODB_URL")
+   DATABASE_NAME = os.getenv("DATABASE_NAME")
+   SECRET_KEY = os.getenv("SECRET_KEY")
 
 settings = Settings()
