@@ -6,7 +6,7 @@ from app.utils.security import hash_password, verify_password
 
 
 
-
+router = APIRouter()
 
 @router.post("/register")
 def register(user: UserRegister):
