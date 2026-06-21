@@ -48,7 +48,7 @@ app.add_middleware(
 # ROUTES
 # =====================
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
-app.include_router(schedule_router, prefix="/schedules", tags=["Schedules"])
+app.include_router(schedule_router, tags=["Schedules"])
 
 
 # =====================
