@@ -12,14 +12,16 @@ schedules_collection = db["schedules"]
 # CREATE
 # =========================
 @router.post("/")
-def create_schedule(
-    schedule: ScheduleCreate,
-    authorization: str = Header(...)
-):
+def create_schedule(schedule: ScheduleCreate, authorization: str = Header(None)):
+
     token = authorization.replace("Bearer ", "")
     user = get_current_user(token)
 
     data = schedule.dict()
+
+    # FIX: convert date to string
+    data["date"] = str(data["date"])
+
     data["user_id"] = user["user_id"]
 
     result = schedules_collection.insert_one(data)
