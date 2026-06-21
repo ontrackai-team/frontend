@@ -8,9 +8,12 @@ router = APIRouter(tags=["Auth"])
 
 @router.post("/register")
 def register(user: UserRegister):
+
+    hashed = hash_password(user.password)
+
     return {
-        "message": "REGISTER WORKS",
-        "user": user.dict()
+        "message": "hash worked",
+        "hash": hashed[:20]
     }
 
 
