@@ -5,18 +5,23 @@ import {
   getSchedules,
   createSchedule,
   updateSchedule,
-  deleteSchedule
-} from "@/lib/api/schedules";
+  deleteSchedule,
+} from "@/services/schedulesService";
 
 export function useSchedules() {
-  const [schedules, setSchedules] = useState([]);
+  const [schedules, setSchedules] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
-    setLoading(true);
-    const data = await getSchedules();
-    setSchedules(data);
-    setLoading(false);
+    try {
+      setLoading(true);
+      const data = await getSchedules();
+      setSchedules(data);
+    } catch (error) {
+      console.error("Failed to fetch schedules:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -43,6 +48,6 @@ export function useSchedules() {
     loading,
     addSchedule,
     editSchedule,
-    removeSchedule
+    removeSchedule,
   };
 }
