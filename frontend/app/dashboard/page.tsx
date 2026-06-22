@@ -4,65 +4,65 @@ import AppLayout from "@/components/layout/AppLayout";
 import { useDashboard } from "@/hooks/useDashboard";
 
 export default function DashboardPage() {
-  const { stats, loading } = useDashboard();
+
+  const { stats, loading } =
+    useDashboard();
 
   if (loading) {
     return (
       <AppLayout>
-        <div className="p-6">
-          Loading dashboard...
-        </div>
+        <p>Loading...</p>
       </AppLayout>
     );
   }
 
   return (
     <AppLayout>
-      <div className="p-6 space-y-6">
 
-        <div>
-          <h1 className="text-3xl font-bold">
-            Dashboard
-          </h1>
+      <div className="p-6">
 
-          <p className="text-gray-500">
-            Overview of your study progress.
-          </p>
-        </div>
+        <h1 className="text-3xl font-bold mb-6">
+          Dashboard
+        </h1>
 
-        <div className="grid md:grid-cols-4 gap-4">
+        <div className="grid md:grid-cols-4 gap-6">
 
-          <div className="bg-white rounded-xl shadow p-5">
+          <div className="bg-white rounded-xl p-6 shadow">
             <h3>Total Assessments</h3>
-            <p className="text-3xl font-bold">
-              {stats?.total_assessments}
+
+            <p className="text-3xl font-bold mt-2">
+              {stats.total}
             </p>
           </div>
 
-          <div className="bg-white rounded-xl shadow p-5">
-            <h3>Pending</h3>
-            <p className="text-3xl font-bold">
-              {stats?.pending}
-            </p>
-          </div>
-
-          <div className="bg-white rounded-xl shadow p-5">
+          <div className="bg-white rounded-xl p-6 shadow">
             <h3>Completed</h3>
-            <p className="text-3xl font-bold">
-              {stats?.completed}
+
+            <p className="text-3xl font-bold mt-2">
+              {stats.completed}
             </p>
           </div>
 
-          <div className="bg-white rounded-xl shadow p-5">
-            <h3>Schedules</h3>
-            <p className="text-3xl font-bold">
-              {stats?.total_schedules}
+          <div className="bg-white rounded-xl p-6 shadow">
+            <h3>Pending</h3>
+
+            <p className="text-3xl font-bold mt-2">
+              {stats.pending}
+            </p>
+          </div>
+
+          <div className="bg-white rounded-xl p-6 shadow">
+            <h3>Upcoming</h3>
+
+            <p className="text-3xl font-bold mt-2">
+              {stats.upcoming}
             </p>
           </div>
 
         </div>
 
       </div>
+
     </AppLayout>
   );
 }

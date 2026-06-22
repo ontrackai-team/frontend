@@ -14,3 +14,109 @@ router = APIRouter(
 )
 
 collection = db["assessments"]
+
+@router.post("/")
+def create_assessment(
+    assessment: AssessmentCreate,
+    authorization: str = Header(...)
+):
+    token = authorization.replace("Bearer ", "")
+    user = get_current_user(token)
+
+    data = assessment.dict()
+
+    data["user_id"] = user["user_id"]
+
+    data["due_date"] = str(data["due_date"])
+
+    result = collection.insert_one(data)
+
+    return {
+        "id": str(result.inserted_id)
+    }
+    
+    @router.get("/")
+    
+def get_assessments(
+    authorization: str = Header(...)
+):
+    token = authorization.replace("Bearer ", "")
+    user = get_current_user(token)
+
+    docs = collection.find({
+        "user_id": user["user_id"]
+    })
+
+    assessments = []
+
+    for doc in docs:
+        assessments.append({
+            "id": str(doc["_id"]),
+            "title": doc["title"],
+            "subject": doc["subject"],
+            "due_date": doc["due_date"],
+            "priority": doc["priority"],
+            "status": doc["status"]
+        })
+
+    return assessments
+
+@router.put("/{assessment_id}")
+def update_assessment(
+    assessment_id: str,
+    assessment: AssessmentUpdate,
+    authorization: str = Header(...)
+):
+    token = authorization.replace("Bearer ", "")
+    user = get_current_user(token)
+
+    data = assessment.dict(exclude_unset=True)
+
+    if "due_date" in data:
+        data["due_date"] = str(data["due_date"])
+
+    result = collection.update_one(
+        {
+            "_id": ObjectId(assessment_id),
+            "user_id": user["user_id"]
+        },
+        {
+            "$set": data
+        }
+    )
+
+    if result.modified_count == 0:
+        raise HTTPException(
+            status_code=404,
+            detail="Assessment not found"
+        )
+
+    return {
+        "message": "Updated"
+    }
+    
+    @router.delete("/{assessment_id}")
+def delete_assessment(
+    assessment_id: str,
+    authorization: str = Header(...)
+):
+    token = authorization.replace("Bearer ", "")
+    user = get_current_user(token)
+
+    result = collection.delete_one(
+        {
+            "_id": ObjectId(assessment_id),
+            "user_id": user["user_id"]
+        }
+    )
+
+    if result.deleted_count == 0:
+        raise HTTPException(
+            status_code=404,
+            detail="Assessment not found"
+        )
+
+    return {
+        "message": "Deleted"
+    }
+    

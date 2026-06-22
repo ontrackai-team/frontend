@@ -1,45 +1,53 @@
 from fastapi import APIRouter, Header
+from datetime import datetime
+
 from app.database import db
 from app.utils.deps import get_current_user
 
-router = APIRouter(prefix="/dashboard")
+router = APIRouter(
+    prefix="/dashboard",
+    tags=["Dashboard"]
+)
 
 assessments = db["assessments"]
-schedules = db["schedules"]
-
-@router.get("/")
-def dashboard(authorization: str = Header(...)):
-
+@router.get("/stats")
+def dashboard_stats(
+    authorization: str = Header(...)
+):
     token = authorization.replace("Bearer ", "")
     user = get_current_user(token)
 
-    user_id = user["user_id"]
-
-    total_assessments = assessments.count_documents(
-        {"user_id": user_id}
+    docs = list(
+        assessments.find(
+            {"user_id": user["user_id"]}
+        )
     )
 
-    pending = assessments.count_documents(
-        {
-            "user_id": user_id,
-            "status": "pending"
-        }
-    )
+    total = len(docs)
 
-    completed = assessments.count_documents(
-        {
-            "user_id": user_id,
-            "status": "completed"
-        }
-    )
+    completed = len([
+        a for a in docs
+        if a.get("status") == "Completed"
+    ])
 
-    total_schedules = schedules.count_documents(
-        {"user_id": user_id}
-    )
+    pending = len([
+        a for a in docs
+        if a.get("status") != "Completed"
+    ])
+
+    today = datetime.today().date()
+
+    upcoming = len([
+        a for a in docs
+        if datetime.strptime(
+            a["due_date"],
+            "%Y-%m-%d"
+        ).date() >= today
+    ])
 
     return {
-        "total_assessments": total_assessments,
-        "pending": pending,
+        "total": total,
         "completed": completed,
-        "total_schedules": total_schedules
+        "pending": pending,
+        "upcoming": upcoming
     }

@@ -6,6 +6,7 @@ from app.routes.schedules import router as schedule_router
 from app.database import client
 
 from app.routes.dashboard import router as dashboard_router
+
 from app.routes.assessments import router as assessment_router
 
 # =====================

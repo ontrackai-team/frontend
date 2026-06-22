@@ -5,7 +5,7 @@ import {
   createAssessment,
   updateAssessment,
   deleteAssessment,
-} from "@/services/assessmentsService";
+} from "@/services/assessmentService";
 
 import { useEffect, useState } from "react";
 
