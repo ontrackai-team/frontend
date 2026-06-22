@@ -6,8 +6,7 @@ from app.routes.schedules import router as schedule_router
 from app.database import client
 
 from app.routes.dashboard import router as dashboard_router
-
-
+from app.routes.assessments import router as assessment_router
 
 # =====================
 # CREATE APP FIRST
@@ -54,6 +53,7 @@ app.add_middleware(
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(schedule_router, tags=["Schedules"])
 app.include_router(dashboard_router)
+app.include_router(assessment_router)
 
 
 # =====================

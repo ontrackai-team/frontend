@@ -1,40 +1,56 @@
 "use client";
 
+import {
+  getAssessments,
+  createAssessment,
+  updateAssessment,
+  deleteAssessment,
+} from "@/services/assessmentsService";
+
 import { useEffect, useState } from "react";
-import { getAssessments } from "@/services/assessmentService";
 
 export function useAssessments() {
-  const [assessments, setAssessments] =
-    useState<any[]>([]);
-  const [loading, setLoading] =
-    useState<boolean>(true);
+  const [assessments, setAssessments] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchAssessments = async () => {
-    setLoading(true);
+    const data = await getAssessments();
 
-    try {
-      const res = await getAssessments();
-
-      const data = Array.isArray(res.data)
-        ? res.data
-        : [];
-
-      setAssessments(data);
-    } catch (err) {
-      console.error(err);
-      setAssessments([]);
-    } finally {
-      setLoading(false);
-    }
+    setAssessments(data);
+    setLoading(false);
   };
 
   useEffect(() => {
     fetchAssessments();
   }, []);
 
+  const addAssessment = async (
+    assessment: any
+  ) => {
+    await createAssessment(assessment);
+    fetchAssessments();
+  };
+
+  const editAssessment = async (
+    id: string,
+    assessment: any
+  ) => {
+    await updateAssessment(id, assessment);
+    fetchAssessments();
+  };
+
+  const removeAssessment = async (
+    id: string
+  ) => {
+    await deleteAssessment(id);
+    fetchAssessments();
+  };
+
   return {
     assessments,
     loading,
-    fetchAssessments,
+    addAssessment,
+    editAssessment,
+    removeAssessment
   };
 }
