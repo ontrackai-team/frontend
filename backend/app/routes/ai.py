@@ -17,4 +17,4 @@ def study_plan(authorization: str = Header(...)):
 
     plan = generate_study_plan(assessments)
 
-    return {"plan": plan}s
+    return {"plan": plan}
