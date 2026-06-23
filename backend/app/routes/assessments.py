@@ -15,6 +15,10 @@ router = APIRouter(
 
 collection = db["assessments"]
 
+
+# ======================
+# CREATE
+# ======================
 @router.post("/")
 def create_assessment(
     assessment: AssessmentCreate,
@@ -24,9 +28,7 @@ def create_assessment(
     user = get_current_user(token)
 
     data = assessment.dict()
-
     data["user_id"] = user["user_id"]
-
     data["due_date"] = str(data["due_date"])
 
     result = collection.insert_one(data)
@@ -34,9 +36,12 @@ def create_assessment(
     return {
         "id": str(result.inserted_id)
     }
-    
-    @router.get("/")
-    
+
+
+# ======================
+# READ
+# ======================
+@router.get("/")
 def get_assessments(
     authorization: str = Header(...)
 ):
@@ -61,6 +66,10 @@ def get_assessments(
 
     return assessments
 
+
+# ======================
+# UPDATE
+# ======================
 @router.put("/{assessment_id}")
 def update_assessment(
     assessment_id: str,
@@ -80,9 +89,7 @@ def update_assessment(
             "_id": ObjectId(assessment_id),
             "user_id": user["user_id"]
         },
-        {
-            "$set": data
-        }
+        {"$set": data}
     )
 
     if result.modified_count == 0:
@@ -91,11 +98,13 @@ def update_assessment(
             detail="Assessment not found"
         )
 
-    return {
-        "message": "Updated"
-    }
-    
-    @router.delete("/{assessment_id}")
+    return {"message": "Updated"}
+
+
+# ======================
+# DELETE
+# ======================
+@router.delete("/{assessment_id}")
 def delete_assessment(
     assessment_id: str,
     authorization: str = Header(...)
@@ -116,7 +125,4 @@ def delete_assessment(
             detail="Assessment not found"
         )
 
-    return {
-        "message": "Deleted"
-    }
-    
+    return {"message": "Deleted"}
