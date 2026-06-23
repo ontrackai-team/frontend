@@ -4,11 +4,12 @@ fastapi
 uvicorn
 pymongo
 python-jose
-passlib[bcrypt]
-bcrypt
+
 python-dotenv
 email-validator
 openai
+passlib[bcrypt]
+bcrypt==4.0.1
 
 pydantic==2.13.4
 pydantic_core==2.46.4
