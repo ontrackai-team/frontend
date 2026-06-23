@@ -8,6 +8,7 @@ from app.database import client
 from app.routes.dashboard import router as dashboard_router
 
 from app.routes.assessments import router as assessment_router
+from app.routes.ai import router as ai_router
 
 # =====================
 # CREATE APP FIRST
@@ -55,6 +56,7 @@ app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(schedule_router, tags=["Schedules"])
 app.include_router(dashboard_router)
 app.include_router(assessment_router)
+app.include_router(ai_router)
 
 
 # =====================
