@@ -29,7 +29,7 @@ def create_assessment(
 
     data = assessment.dict()
     data["user_id"] = user["user_id"]
-    data["due_date"] = str(data["due_date"])
+    data["due_date"] = data["due_date"].isoformat() 
 
     result = collection.insert_one(data)
 
@@ -82,7 +82,7 @@ def update_assessment(
     data = assessment.dict(exclude_unset=True)
 
     if "due_date" in data:
-        data["due_date"] = str(data["due_date"])
+        data["due_date"] = data["due_date"].isoformat()
 
     result = collection.update_one(
         {
