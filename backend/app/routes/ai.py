@@ -1,20 +1,34 @@
-from fastapi import APIRouter, Header
-from app.utils.deps import get_current_user
-from app.database import db
-from app.services.ai import generate_study_plan
+from fastapi import APIRouter
+from pydantic import BaseModel
 
-router = APIRouter(prefix="/ai", tags=["AI"])
+from app.services.gemini_service import generate_text
+
+router = APIRouter(
+    prefix="/ai",
+    tags=["AI"]
+)
+
+class StudyPlanRequest(BaseModel):
+    subject: str
+    days_left: int
+    hours_per_day: int
+
 
 @router.post("/study-plan")
-def study_plan(authorization: str = Header(...)):
+def study_plan(data: StudyPlanRequest):
 
-    token = authorization.replace("Bearer ", "")
-    user = get_current_user(token)
+    prompt = f"""
+    Create a study plan.
 
-    assessments = list(db["assessments"].find(
-        {"user_id": user["user_id"]}
-    ))
+    Subject: {data.subject}
+    Days Left: {data.days_left}
+    Hours Per Day: {data.hours_per_day}
 
-    plan = generate_study_plan(assessments)
+    Return a simple daily study schedule.
+    """
 
-    return {"plan": plan}
+    plan = generate_text(prompt)
+
+    return {
+        "plan": plan
+    }
