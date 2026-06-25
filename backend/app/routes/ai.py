@@ -1,7 +1,6 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from app.services.ai import generate_study_plan
-from app.services.gemini_service import generate_text
+from app.services.ai_service import generate_text, generate_study_plan
 
 router = APIRouter(prefix="/ai", tags=["AI"])
 
@@ -19,22 +18,10 @@ class StudyPlanRequest(BaseModel):
 def study_plan(data: StudyPlanRequest):
 
     prompt = f"""
-    You are a study planner AI.
-
-    Create a DAILY study plan in JSON format ONLY.
-
+    Create study plan for:
     Subject: {data.subject}
-    Days Left: {data.days_left}
-    Hours Per Day: {data.hours_per_day}
-
-    Return format:
-    [
-      {{
-        "title": "Topic",
-        "date": "Day 1",
-        "suggested_time": "2 hours"
-      }}
-    ]
+    Days: {data.days_left}
+    Hours/day: {data.hours_per_day}
     """
 
     plan = generate_study_plan(prompt)
@@ -55,17 +42,9 @@ def chat(data: ChatRequest):
     prompt = f"""
     You are OnTrackAI Assistant.
 
-    Help students with:
-    - studying
-    - assessments
-    - schedules
-    - productivity
-    - time management
-
-    User message:
-    {data.message}
+    User: {data.message}
     """
 
-    response = generate_text(prompt)
+    reply = generate_text(prompt)
 
-    return {"reply": response}
+    return {"reply": reply}

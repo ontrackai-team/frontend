@@ -1,9 +1,5 @@
 import API from "./api";
 
-export const generateStudyPlan = async () => {
-  const res = await API.get("/ai/planner");
-  return res.data;
-};
 export const createStudyPlan = async (
   subject: string,
   days_left: number,
