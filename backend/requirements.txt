@@ -39,3 +39,5 @@ pymongo
 python-jose[cryptography]
 passlib[bcrypt]
 bcrypt
+
+email_validator
