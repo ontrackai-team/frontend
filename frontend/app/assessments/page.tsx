@@ -1,48 +1,27 @@
-import API from "./api";
+"use client";
 
-export type Assessment = {
-  id?: string;
-  title: string;
-  subject: string;
-  due_date: string;
-  priority: string;
-  status: string;
-};
+import { useAssessments } from "@/hooks/useAssessments";
+import AddAssessmentForm from "@/components/assessment/AddAssessmentForm";
+import AssessmentTable from "@/components/assessment/AssessmentTable";
+import AppLayout from "@/components/layout/AppLayout";
 
-export const getAssessments = async () => {
-  const { data } = await API.get("/assessments/");
-  return data;
-};
+export default function AssessmentsPage() {
+  const { assessments, loading, fetchAssessments } = useAssessments();
 
-export const createAssessment = async (
-  assessment: Assessment
-) => {
-  const { data } = await API.post(
-    "/assessments/",
-    assessment
+  if (loading) return <p>Loading...</p>;
+
+  return (
+    <AppLayout>
+      <h1 className="text-3xl font-bold">Assessments</h1>
+
+      {/* ADD FORM */}
+      <AddAssessmentForm onSuccess={fetchAssessments} />
+
+      {/* TABLE */}
+      <AssessmentTable
+        assessments={assessments}
+        onDelete={fetchAssessments}
+      />
+    </AppLayout>
   );
-
-  return data;
-};
-
-export const updateAssessment = async (
-  id: string,
-  assessment: Partial<Assessment>
-) => {
-  const { data } = await API.put(
-    `/assessments/${id}`,
-    assessment
-  );
-
-  return data;
-};
-
-export const deleteAssessment = async (
-  id: string
-) => {
-  const { data } = await API.delete(
-    `/assessments/${id}`
-  );
-
-  return data;
-};
+}

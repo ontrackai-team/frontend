@@ -1,71 +1,51 @@
-const STORAGE_KEY = "assessments";
+import API from "./api";
 
-const getStoredAssessments = () => {
-  if (typeof window === "undefined") return [];
 
-  const data = localStorage.getItem(STORAGE_KEY);
 
-  return data ? JSON.parse(data) : [];
-};
-
-const saveAssessments = (data: any[]) => {
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(data)
-  );
+export type Assessment = {
+  id?: string;
+  title: string;
+  course: string;
+  due_date: string;
+  weight: number;
+  description: string;
+  status: string;
 };
 
 export const getAssessments = async () => {
-  const data = getStoredAssessments();
-
-  return {
-    data,
-  };
+  const { data } = await API.get("/assessments/");
+  return data;
 };
 
 export const createAssessment = async (
-  assessment: any
+  assessment: Assessment
 ) => {
-  const assessments = getStoredAssessments();
+  const { data } = await API.post(
+    "/assessments/",
+    assessment
+  );
 
-  const newAssessment = {
-    id: Date.now().toString(),
-    ...assessment,
-  };
+  return data;
+};
 
-  assessments.push(newAssessment);
+export const updateAssessment = async (
+  id: string,
+  assessment: Partial<Assessment>
+) => {
+  const { data } = await API.put(
+    `/assessments/${id}`,
+    assessment
+  );
 
-  saveAssessments(assessments);
-
-  return {
-    data: newAssessment,
-  };
+  return data;
 };
 
 export const deleteAssessment = async (
   id: string
 ) => {
-  const assessments = getStoredAssessments();
-
-  const filtered = assessments.filter(
-    (a: any) => a.id !== id
+  const { data } = await API.delete(
+    `/assessments/${id}`
   );
 
-  saveAssessments(filtered);
-
-  return {
-    success: true,
-  };
-};
-
-export const getAssessmentById = async (
-  id: string
-) => {
-  const assessments = getStoredAssessments();
-
-  return {
-    data: assessments.find(
-      (a: any) => a.id === id
-    ),
-  };
+  return data;
 };

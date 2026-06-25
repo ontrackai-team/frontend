@@ -49,6 +49,7 @@ export function useAssessments() {
   return {
     assessments,
     loading,
+    fetchAssessments,
     addAssessment,
     editAssessment,
     removeAssessment
