@@ -6,11 +6,10 @@ import { createAssessment } from "@/services/assessmentService";
 export default function AddAssessmentForm({ onSuccess }: any) {
   const [form, setForm] = useState({
     title: "",
-    course: "",
+    subject: "",
     due_date: "",
-    weight: 0,
-    description: "",
-    status: "pending",
+    priority: "Medium",
+    status: "Pending",
   });
 
   const [loading, setLoading] = useState(false);
@@ -28,11 +27,10 @@ export default function AddAssessmentForm({ onSuccess }: any) {
 
       setForm({
         title: "",
-        course: "",
+        subject: "",
         due_date: "",
-        weight: 0,
-        description: "",
-        status: "pending",
+        priority: "Medium",
+        status: "Pending",
       });
 
       if (onSuccess) onSuccess(); // refresh list
@@ -50,6 +48,7 @@ export default function AddAssessmentForm({ onSuccess }: any) {
     >
       <h2 className="text-xl font-bold">Add Assessment</h2>
 
+      {/* TITLE */}
       <input
         name="title"
         placeholder="Title"
@@ -58,39 +57,49 @@ export default function AddAssessmentForm({ onSuccess }: any) {
         className="border p-2 w-full"
       />
 
+      {/* SUBJECT (was course) */}
       <input
-        name="course"
-        placeholder="Course"
-        value={form.course}
+        name="subject"
+        placeholder="Subject"
+        value={form.subject}
         onChange={handleChange}
         className="border p-2 w-full"
       />
 
+      {/* DUE DATE */}
       <input
         name="due_date"
-        type="datetime-local"
+        type="date"
         value={form.due_date}
         onChange={handleChange}
         className="border p-2 w-full"
       />
 
-      <input
-        name="weight"
-        type="number"
-        placeholder="Weight"
-        value={form.weight}
+      {/* PRIORITY (was weight) */}
+      <select
+        name="priority"
+        value={form.priority}
         onChange={handleChange}
         className="border p-2 w-full"
-      />
+      >
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+      </select>
 
-      <textarea
-        name="description"
-        placeholder="Description"
-        value={form.description}
+      {/* STATUS */}
+      <select
+        name="status"
+        value={form.status}
         onChange={handleChange}
         className="border p-2 w-full"
-      />
+      >
+        <option value="Pending">Pending</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Completed">Completed</option>
+      </select>
 
+      {/* SUBMIT */}
       <button
         type="submit"
         disabled={loading}

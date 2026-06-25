@@ -4,9 +4,7 @@ export default function AssessmentTable({
   assessments,
   onDelete,
 }: any) {
-  const handleDelete = async (
-    id: string
-  ) => {
+  const handleDelete = async (id: string) => {
     await deleteAssessment(id);
     onDelete();
   };
@@ -16,61 +14,35 @@ export default function AssessmentTable({
       <table className="w-full">
         <thead>
           <tr className="border-b">
-            <th className="text-left p-3">
-              Title
-            </th>
-            <th className="text-left p-3">
-              Course
-            </th>
-            <th className="text-left p-3">
-              Weight
-            </th>
-            <th className="text-left p-3">
-              Status
-            </th>
-            <th className="text-left p-3">
-              Action
-            </th>
+            <th className="text-left p-3">Title</th>
+            <th className="text-left p-3">Subject</th>
+            <th className="text-left p-3">Priority</th>
+            <th className="text-left p-3">Status</th>
+            <th className="text-left p-3">Action</th>
           </tr>
         </thead>
 
         <tbody>
           {assessments.length === 0 ? (
             <tr>
-              <td
-                colSpan={5}
-                className="text-center p-4"
-              >
+              <td colSpan={5} className="text-center p-4">
                 No assessments found.
               </td>
             </tr>
           ) : (
             assessments.map((a: any) => (
-              <tr
-                key={a.id}
-                className="border-b"
-              >
-                <td className="p-3">
-                  {a.title}
-                </td>
+              <tr key={a.id} className="border-b">
+                <td className="p-3">{a.title}</td>
 
-                <td className="p-3">
-                  {a.course}
-                </td>
+                <td className="p-3">{a.subject}</td>
 
-                <td className="p-3">
-                  {a.weight}%
-                </td>
+                <td className="p-3">{a.priority}</td>
 
-                <td className="p-3">
-                  {a.status}
-                </td>
+                <td className="p-3">{a.status}</td>
 
                 <td className="p-3">
                   <button
-                    onClick={() =>
-                      handleDelete(a.id)
-                    }
+                    onClick={() => handleDelete(a.id)}
                     className="text-red-600"
                   >
                     Delete

@@ -1,22 +1,21 @@
 import API from "./api";
 
-
-
 export type Assessment = {
   id?: string;
   title: string;
-  course: string;
+  subject: string;
   due_date: string;
-  weight: number;
-  description: string;
+  priority: string;
   status: string;
 };
 
+// GET ALL
 export const getAssessments = async () => {
   const { data } = await API.get("/assessments/");
   return data;
 };
 
+// CREATE
 export const createAssessment = async (
   assessment: Assessment
 ) => {
@@ -28,6 +27,7 @@ export const createAssessment = async (
   return data;
 };
 
+// UPDATE
 export const updateAssessment = async (
   id: string,
   assessment: Partial<Assessment>
@@ -40,9 +40,8 @@ export const updateAssessment = async (
   return data;
 };
 
-export const deleteAssessment = async (
-  id: string
-) => {
+// DELETE
+export const deleteAssessment = async (id: string) => {
   const { data } = await API.delete(
     `/assessments/${id}`
   );
