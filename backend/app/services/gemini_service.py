@@ -1,7 +1,7 @@
 import os
 from openai import OpenAI
 
-client = OpenAI(api_key=os.getenv("GEMINI_API_KEY"))  # OR OpenAI key if using OpenAI
+client = OpenAI(api_key=os.getenv("GEMINI_API_KEY")) 
 
 def generate_text(prompt: str):
     response = client.chat.completions.create(

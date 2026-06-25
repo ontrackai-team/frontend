@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from app.services.gemini_service import generate_text
+from app.services.ai import generate_study_plan
 
 router = APIRouter(prefix="/ai", tags=["AI"])
 
@@ -32,7 +32,7 @@ def study_plan(data: StudyPlanRequest):
     ]
     """
 
-    plan = generate_text(prompt)
+    plan = generate_study_plan(prompt)
 
     return {"plan": plan}
 
