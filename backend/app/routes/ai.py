@@ -1,9 +1,14 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 from app.services.ai import generate_study_plan
+from app.services.gemini_service import generate_text
 
 router = APIRouter(prefix="/ai", tags=["AI"])
 
+
+# =========================
+# STUDY PLAN
+# =========================
 class StudyPlanRequest(BaseModel):
     subject: str
     days_left: int
@@ -37,13 +42,9 @@ def study_plan(data: StudyPlanRequest):
     return {"plan": plan}
 
 
-class ChatRequest(BaseModel):
-    message: str
-
-
+# =========================
 # CHAT
 # =========================
-
 class ChatRequest(BaseModel):
     message: str
 
@@ -67,6 +68,4 @@ def chat(data: ChatRequest):
 
     response = generate_text(prompt)
 
-    return {
-        "reply": response
-    }
+    return {"reply": response}
