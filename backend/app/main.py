@@ -10,6 +10,7 @@ from app.routes.dashboard import router as dashboard_router
 from app.routes.assessments import router as assessment_router
 from app.routes.ai import router as ai_router
 
+
 # =====================
 # CREATE APP FIRST
 # =====================

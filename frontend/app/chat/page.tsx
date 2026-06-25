@@ -5,59 +5,131 @@ import AppLayout from "@/components/layout/AppLayout";
 import { sendMessage } from "@/services/chatService";
 
 export default function ChatPage() {
+
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSend = async () => {
-    const userMsg = { role: "user", text: input };
 
-    setMessages((prev) => [...prev, userMsg]);
+    if (!input.trim()) return;
 
-    const res = await sendMessage(input);
+    const userMessage = {
+      role: "user",
+      text: input
+    };
 
-    const botMsg = { role: "ai", text: res.reply };
+    setMessages(prev => [
+      ...prev,
+      userMessage
+    ]);
 
-    setMessages((prev) => [...prev, botMsg]);
+    setLoading(true);
 
+    try {
+
+      const res = await sendMessage(input);
+
+      const aiMessage = {
+        role: "ai",
+        text: res.reply
+      };
+
+      setMessages(prev => [
+        ...prev,
+        aiMessage
+      ]);
+
+    } catch {
+
+      setMessages(prev => [
+        ...prev,
+        {
+          role: "ai",
+          text: "Something went wrong."
+        }
+      ]);
+
+    }
+
+    setLoading(false);
     setInput("");
   };
 
   return (
     <AppLayout>
-      <div className="p-6 space-y-4">
 
-        <h1 className="text-3xl font-bold">AI Assistant</h1>
+      <div className="p-6">
 
-        <div className="bg-white p-4 rounded h-[400px] overflow-y-auto space-y-2">
-          {messages.map((m, i) => (
+        <h1 className="text-3xl font-bold mb-6">
+          AI Assistant
+        </h1>
+
+        <div className="bg-white rounded-xl shadow p-4 h-[500px] overflow-y-auto space-y-3">
+
+          {messages.length === 0 && (
+            <p className="text-gray-500">
+              Ask anything about studying,
+              assessments or schedules.
+            </p>
+          )}
+
+          {messages.map((message, index) => (
+
             <div
-              key={i}
-              className={m.role === "user" ? "text-right" : "text-left"}
+              key={index}
+              className={
+                message.role === "user"
+                  ? "text-right"
+                  : "text-left"
+              }
             >
-              <p className="inline-block bg-gray-100 px-3 py-2 rounded">
-                {m.text}
-              </p>
+
+              <div
+                className={
+                  message.role === "user"
+                    ? "inline-block bg-blue-500 text-white px-4 py-2 rounded-lg"
+                    : "inline-block bg-gray-100 px-4 py-2 rounded-lg"
+                }
+              >
+                {message.text}
+              </div>
+
             </div>
+
           ))}
+
+          {loading && (
+            <p className="text-gray-500">
+              AI is typing...
+            </p>
+          )}
+
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-3 mt-4">
+
           <input
-            className="border p-2 w-full"
+            type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) =>
+              setInput(e.target.value)
+            }
             placeholder="Ask AI..."
+            className="border rounded-lg p-3 flex-1"
           />
 
           <button
             onClick={handleSend}
-            className="bg-black text-white px-4 rounded"
+            className="bg-black text-white px-6 rounded-lg"
           >
             Send
           </button>
+
         </div>
 
       </div>
+
     </AppLayout>
   );
 }

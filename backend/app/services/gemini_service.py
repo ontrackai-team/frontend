@@ -1,14 +1,15 @@
-from google import genai
-from app.config import settings
+import os
+from openai import OpenAI
 
-client = genai.Client(
-    api_key=settings.GEMINI_API_KEY
-)
+client = OpenAI(api_key=os.getenv("GEMINI_API_KEY"))  # OR OpenAI key if using OpenAI
 
 def generate_text(prompt: str):
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "You are a helpful AI study planner."},
+            {"role": "user", "content": prompt}
+        ]
     )
 
-    return response.text
+    return response.choices[0].message.content

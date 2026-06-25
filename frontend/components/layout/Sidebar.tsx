@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { Brain } from "lucide-react";
 import {
   LayoutDashboard,
   ClipboardCheck,
@@ -98,8 +99,18 @@ export default function Sidebar() {
               size={20}
               className="group-hover:scale-110 transition"
             />
-            AI Assistant
+            AI Assistant Chat
           </Link>
+          <Link
+  href="/planner"
+  className="group flex items-center gap-3 rounded-xl px-4 py-3 text-slate-300 transition-all duration-300 hover:bg-white/10 hover:text-white"
+>
+  <Brain
+    size={20}
+    className="group-hover:scale-110 transition"
+  />
+  AI Planner
+</Link>
 
           <Link
             href="/settings"
