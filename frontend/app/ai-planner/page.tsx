@@ -51,10 +51,17 @@ export default function AIPlannerPage() {
           {loading ? "Generating..." : "Generate Study Plan"}
         </button>
 
-        {error && (
-          <p className="text-red-500">{error}</p>
-        )}
+       {error && (
+         <div className="rounded-lg border border-gray-300 bg-gray-100 p-4 shadow-sm">
+         <h3 className="font-semibold text-black">
+       AI Study Planner
+         </h3>
 
+         <p className="mt-2 text-black">
+      {error}
+         </p>
+         </div>
+           )}
         <p className="text-gray-400">
           After generation, your schedule page will update automatically.
         </p>
