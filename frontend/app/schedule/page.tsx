@@ -2,35 +2,14 @@
 
 import { useSchedules } from "@/hooks/useSchedules";
 import AppLayout from "@/components/layout/AppLayout";
-import { useState } from "react";
 
 export default function SchedulePage() {
-  const { schedules, loading, addSchedule, removeSchedule } = useSchedules();
-
-  const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
-  const [duration, setDuration] = useState("");
-
-  const handleAdd = async () => {
-    if (!title || !date || !duration) return;
-
-    await addSchedule({
-      title,
-      date,
-      duration: Number(duration),
-      status: "pending",
-    });
-
-    // RESET FORM (IMPORTANT UX FIX)
-    setTitle("");
-    setDate("");
-    setDuration("");
-  };
+  const { schedules, loading, removeSchedule } = useSchedules();
 
   if (loading) {
     return (
       <AppLayout>
-        <p className="p-6">Loading schedules...</p>
+        <p className="p-6">Loading AI Schedule...</p>
       </AppLayout>
     );
   }
@@ -39,68 +18,62 @@ export default function SchedulePage() {
     <AppLayout>
       <div className="p-6 space-y-6">
 
-        {/* CREATE */}
-        <div className="bg-white p-4 rounded-xl shadow space-y-3">
-          <h2 className="text-xl font-semibold">Create Schedule</h2>
+        {/* HEADER */}
+        <div>
+          <h1 className="text-3xl font-bold">
+            AI Study Schedule
+          </h1>
 
-          <input
-            className="border p-2 w-full"
-            placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-
-          <input
-            type="date"
-            className="border p-2 w-full"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
-
-          <input
-            type="number"
-            className="border p-2 w-full"
-            placeholder="Duration (mins)"
-            value={duration}
-            onChange={(e) => setDuration(e.target.value)}
-          />
-
-          <button
-            className="bg-black text-white px-4 py-2 rounded w-full"
-            onClick={handleAdd}
-          >
-            Add Schedule
-          </button>
+          <p className="text-gray-600 mt-1">
+            Your personalized study plan generated from assessments
+          </p>
         </div>
 
-        {/* LIST */}
-        <div className="space-y-3">
-          {schedules.length === 0 && (
-            <p className="text-gray-500">No schedules yet.</p>
-          )}
+        {/* EMPTY STATE */}
+        {schedules.length === 0 && (
+          <div className="bg-white p-6 rounded-xl shadow">
+            <p className="text-gray-500">
+              No AI schedule found yet.
+            </p>
 
-          {schedules.map((s) => (
+            <p className="text-sm text-gray-400 mt-2">
+              Go to AI Planner → Generate Study Plan
+            </p>
+          </div>
+        )}
+
+        {/* SCHEDULE LIST */}
+        <div className="space-y-3">
+
+          {schedules.map((s: any) => (
             <div
-              key={s.id}
-              className="bg-white p-4 rounded-xl shadow flex justify-between"
+              key={s.id || s._id}
+              className="bg-white p-4 rounded-xl shadow flex justify-between items-center"
             >
+
+              {/* LEFT CONTENT */}
               <div>
-                <h3 className="font-semibold">{s.title}</h3>
-                <p className="text-sm text-gray-500">
-                  {s.date} • {s.duration} min
+                <h3 className="font-semibold text-lg">
+                  {s.title}
+                </h3>
+
+                <p className="text-sm text-gray-500 mt-1">
+                  📅 {s.date} • ⏱ {s.duration} min • 📌 {s.status}
                 </p>
               </div>
 
+              {/* ACTION */}
               <button
-                onClick={() => removeSchedule(s.id!)}
-                className="text-red-500"
+                onClick={() => removeSchedule(s.id || s._id)}
+                className="text-red-500 hover:text-red-700 text-sm"
               >
                 Delete
               </button>
+
             </div>
           ))}
-        </div>
 
+        </div>
       </div>
     </AppLayout>
   );

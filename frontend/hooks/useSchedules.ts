@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   getSchedules,
   createSchedule,
@@ -12,7 +12,10 @@ export function useSchedules() {
   const [schedules, setSchedules] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchData = async () => {
+  // =========================
+  // FETCH DATA
+  // =========================
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       const data = await getSchedules();
@@ -22,25 +25,53 @@ export function useSchedules() {
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchData();
   }, []);
 
+  // =========================
+  // INITIAL LOAD
+  // =========================
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  // =========================
+  // AUTO REFRESH (IMPORTANT FIX)
+  // When user comes back from AI Planner page
+  // =========================
+  useEffect(() => {
+    const handleFocus = () => {
+      fetchData();
+    };
+
+    window.addEventListener("focus", handleFocus);
+
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, [fetchData]);
+
+  // =========================
+  // CREATE
+  // =========================
   const addSchedule = async (data: any) => {
     await createSchedule(data);
-    fetchData();
+    await fetchData();
   };
 
+  // =========================
+  // UPDATE
+  // =========================
   const editSchedule = async (id: string, data: any) => {
     await updateSchedule(id, data);
-    fetchData();
+    await fetchData();
   };
 
+  // =========================
+  // DELETE
+  // =========================
   const removeSchedule = async (id: string) => {
     await deleteSchedule(id);
-    fetchData();
+    await fetchData();
   };
 
   return {
@@ -49,5 +80,6 @@ export function useSchedules() {
     addSchedule,
     editSchedule,
     removeSchedule,
+    refetch: fetchData, // ⭐ IMPORTANT FOR AI PLANNER
   };
 }

@@ -4,8 +4,16 @@ import { useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { createStudyPlan } from "@/services/aiPlanner";
 
+type PlanItem = {
+  id?: string;
+  title: string;
+  date: string;
+  duration: number;
+  status?: string;
+};
+
 export default function AIPlannerPage() {
-  const [plan, setPlan] = useState<string>("");
+  const [plan, setPlan] = useState<PlanItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -14,10 +22,11 @@ export default function AIPlannerPage() {
       setLoading(true);
       setError("");
 
-      // backend now generates plan from assessments (NO INPUTS NEEDED)
       const res = await createStudyPlan();
 
-      setPlan(res.plan);
+      // backend returns:
+      // { message: "...", plan: saved[] }
+      setPlan(res.plan || []);
     } catch (err) {
       console.error(err);
       setError("Failed to generate study plan. Check backend logs.");
@@ -36,10 +45,10 @@ export default function AIPlannerPage() {
         </h1>
 
         <p className="text-gray-600">
-          Generate a smart study plan from your saved assessments
+          Generate AI-powered study plan from your assessments
         </p>
 
-        {/* BUTTON ONLY (NO INPUTS ANYMORE) */}
+        {/* BUTTON */}
         <div className="bg-white p-4 rounded shadow">
           <button
             onClick={handleGenerate}
@@ -55,26 +64,40 @@ export default function AIPlannerPage() {
           <p className="text-red-500">{error}</p>
         )}
 
-        {/* RESULT */}
-        <div className="bg-white p-4 rounded shadow min-h-[200px]">
-          {loading && (
-            <p className="text-gray-500">
-              AI is thinking... generating your study plan 🚀
-            </p>
-          )}
+        {/* LOADING */}
+        {loading && (
+          <p className="text-gray-500">
+            AI is generating your study schedule...
+          </p>
+        )}
 
-          {!loading && !plan && (
-            <p className="text-gray-400">
-              Your generated study plan will appear here.
-            </p>
-          )}
+        {/* EMPTY STATE */}
+        {!loading && plan.length === 0 && (
+          <p className="text-gray-400">
+            No study plan generated yet.
+          </p>
+        )}
 
-          {/* AI OUTPUT */}
-          {plan && (
-            <pre className="whitespace-pre-wrap text-sm">
-              {plan}
-            </pre>
-          )}
+        {/* PLAN LIST (FROM MONGO SCHEDULES) */}
+        <div className="space-y-3">
+          {plan.map((item, index) => (
+            <div
+              key={item.id || index}
+              className="bg-white p-4 rounded shadow"
+            >
+              <h3 className="font-semibold">
+                {item.title}
+              </h3>
+
+              <p className="text-sm text-gray-500">
+                {item.date} • {item.duration} hour(s)
+              </p>
+
+              <span className="text-xs text-green-600">
+                {item.status}
+              </span>
+            </div>
+          ))}
         </div>
 
       </div>
