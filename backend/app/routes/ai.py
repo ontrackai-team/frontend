@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Header
+from app.utils.json_encoder import clean_mongo
 from app.utils.deps import get_current_user
 from app.database import db
 from app.services.ai_service import generate_study_plan, generate_text
@@ -13,7 +14,7 @@ assessments_collection = db["assessments"]
 
 
 # =========================
-# STUDY PLAN (FIXED)
+# STUDY PLAN
 # =========================
 @router.post("/study-plan")
 def study_plan(authorization: str = Header(...)):
@@ -24,12 +25,13 @@ def study_plan(authorization: str = Header(...)):
     # 1. GET assessments
     assessments = list(
         assessments_collection.find(
-            {"user_id": user["user_id"]},
-            {"_id": 0}
+            {"user_id": user["user_id"]}
         )
     )
 
-    # 2. STRONG AI PROMPT (IMPORTANT FIX)
+    assessments = clean_mongo(assessments)
+
+    # 2. PROMPT
     prompt = f"""
     You are a study planner AI.
 
@@ -37,9 +39,8 @@ def study_plan(authorization: str = Header(...)):
     - Return ONLY valid JSON
     - NO markdown
     - NO explanations
-    - NO ```json blocks
 
-    Format MUST be:
+    Format:
     [
       {{
         "title": "Topic",
@@ -54,14 +55,11 @@ def study_plan(authorization: str = Header(...)):
 
     plan_text = generate_study_plan(prompt)
 
-    # 3. CLEAN RESPONSE (VERY IMPORTANT FIX)
+    # 3. CLEAN JSON
     def clean_json(text: str):
         text = text.strip()
-
-        # remove ```json and ```
         text = re.sub(r"```json", "", text)
         text = re.sub(r"```", "", text)
-
         return text.strip()
 
     try:
@@ -72,7 +70,7 @@ def study_plan(authorization: str = Header(...)):
         print("RAW RESPONSE:", plan_text)
         plan = []
 
-    # 4. SAVE TO MONGO
+    # 4. SAVE TO DB
     saved = []
 
     for item in plan:
@@ -98,7 +96,7 @@ def study_plan(authorization: str = Header(...)):
 
 
 # =========================
-# CHAT (IMPROVED)
+# CHAT
 # =========================
 class ChatRequest(BaseModel):
     message: str
@@ -112,17 +110,17 @@ def chat(data: ChatRequest, authorization: str = Header(...)):
 
     assessments = list(
         assessments_collection.find(
-            {"user_id": user["user_id"]},
-            {"_id": 0}
+            {"user_id": user["user_id"]}
         )
     )
+    assessments = clean_mongo(assessments)
 
     schedules = list(
         schedules_collection.find(
-            {"user_id": user["user_id"]},
-            {"_id": 0}
+            {"user_id": user["user_id"]}
         )
     )
+    schedules = clean_mongo(schedules)
 
     prompt = f"""
     You are OnTrackAI Assistant.
