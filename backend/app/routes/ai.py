@@ -52,8 +52,14 @@ def study_plan(authorization: str = Header(...)):
     Assessments:
     {json.dumps(assessments)}
     """
-
-    plan_text = generate_study_plan(prompt)
+    try:
+        plan_text = generate_study_plan(prompt)
+    except Exception as e:
+        return {
+            "success": False,
+            "message": str(e),
+            "plan": []
+        }
 
     # 3. CLEAN JSON
     def clean_json(text: str):
@@ -87,7 +93,7 @@ def study_plan(authorization: str = Header(...)):
         schedule["id"] = str(result.inserted_id)
         saved.append(schedule)
 
-    # 🔥 FINAL FIX: ensure NO ObjectId ever leaks
+    # FINAL FIX: ensure NO ObjectId ever leaks
     return clean_mongo({
         "message": "Study plan generated successfully",
         "plan": saved

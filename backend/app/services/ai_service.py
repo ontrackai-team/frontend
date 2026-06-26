@@ -1,6 +1,6 @@
-
 import os
 import google.generativeai as genai
+from google.api_core.exceptions import ResourceExhausted
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
@@ -11,8 +11,17 @@ model = genai.GenerativeModel("gemini-2.5-flash")
 # CHAT / TEXT GENERATION
 # =========================
 def generate_text(prompt: str):
-    response = model.generate_content(prompt)
-    return response.text
+    try:
+        response = model.generate_content(prompt)
+        return response.text
+
+    except ResourceExhausted:
+        raise Exception(
+            "Daily free-tier request limit reached. Please try again tomorrow."
+        )
+
+    except Exception as e:
+        raise Exception(f"Gemini Error: {str(e)}")
 
 
 # =========================
@@ -37,5 +46,14 @@ def generate_study_plan(prompt: str):
     {prompt}
     """
 
-    response = model.generate_content(strict_prompt)
-    return response.text
+    try:
+        response = model.generate_content(strict_prompt)
+        return response.text
+
+    except ResourceExhausted:
+        raise Exception(
+            "Daily free-tier request limit reached. Please try again tomorrow."
+        )
+
+    except Exception as e:
+        raise Exception(f"Gemini Error: {str(e)}")
