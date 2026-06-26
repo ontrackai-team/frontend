@@ -84,15 +84,14 @@ def study_plan(authorization: str = Header(...)):
 
         result = schedules_collection.insert_one(schedule)
 
-        saved.append({
-            "id": str(result.inserted_id),
-            **schedule
-        })
+        schedule["id"] = str(result.inserted_id)
+        saved.append(schedule)
 
-    return {
+    # 🔥 FINAL FIX: ensure NO ObjectId ever leaks
+    return clean_mongo({
         "message": "Study plan generated successfully",
         "plan": saved
-    }
+    })
 
 
 # =========================
