@@ -113,19 +113,13 @@ def chat(data: ChatRequest, authorization: str = Header(...)):
     token = authorization.replace("Bearer ", "")
     user = get_current_user(token)
 
-    assessments = list(
-        assessments_collection.find(
-            {"user_id": user["user_id"]}
-        )
+    assessments = clean_mongo(
+        list(assessments_collection.find({"user_id": user["user_id"]}))
     )
-    assessments = clean_mongo(assessments)
 
-    schedules = list(
-        schedules_collection.find(
-            {"user_id": user["user_id"]}
-        )
+    schedules = clean_mongo(
+        list(schedules_collection.find({"user_id": user["user_id"]}))
     )
-    schedules = clean_mongo(schedules)
 
     prompt = f"""
     You are OnTrackAI Assistant.
@@ -142,6 +136,17 @@ def chat(data: ChatRequest, authorization: str = Header(...)):
     Give helpful study advice.
     """
 
-    reply = generate_text(prompt)
+    try:
+        reply = generate_text(prompt)
 
-    return {"reply": reply}
+        return {
+            "success": True,
+            "reply": reply
+        }
+
+    except Exception as e:
+        return {
+            "success": False,
+            "reply": "",
+            "message": str(e)
+        }
