@@ -5,16 +5,27 @@ import AppLayout from "@/components/layout/AppLayout";
 import { useState } from "react";
 
 export default function SchedulePage() {
-  const {
-    schedules,
-    loading,
-    addSchedule,
-    removeSchedule
-  } = useSchedules();
+  const { schedules, loading, addSchedule, removeSchedule } = useSchedules();
 
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
   const [duration, setDuration] = useState("");
+
+  const handleAdd = async () => {
+    if (!title || !date || !duration) return;
+
+    await addSchedule({
+      title,
+      date,
+      duration: Number(duration),
+      status: "pending",
+    });
+
+    // RESET FORM (IMPORTANT UX FIX)
+    setTitle("");
+    setDate("");
+    setDuration("");
+  };
 
   if (loading) {
     return (
@@ -35,12 +46,14 @@ export default function SchedulePage() {
           <input
             className="border p-2 w-full"
             placeholder="Title"
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
 
           <input
             type="date"
             className="border p-2 w-full"
+            value={date}
             onChange={(e) => setDate(e.target.value)}
           />
 
@@ -48,19 +61,13 @@ export default function SchedulePage() {
             type="number"
             className="border p-2 w-full"
             placeholder="Duration (mins)"
+            value={duration}
             onChange={(e) => setDuration(e.target.value)}
           />
 
           <button
-            className="bg-black text-white px-4 py-2 rounded"
-            onClick={() =>
-              addSchedule({
-                title,
-                date,
-                duration: Number(duration),
-                status: "pending"
-              })
-            }
+            className="bg-black text-white px-4 py-2 rounded w-full"
+            onClick={handleAdd}
           >
             Add Schedule
           </button>
@@ -68,7 +75,11 @@ export default function SchedulePage() {
 
         {/* LIST */}
         <div className="space-y-3">
-          {schedules.map((s: any) => (
+          {schedules.length === 0 && (
+            <p className="text-gray-500">No schedules yet.</p>
+          )}
+
+          {schedules.map((s) => (
             <div
               key={s.id}
               className="bg-white p-4 rounded-xl shadow flex justify-between"
@@ -81,7 +92,7 @@ export default function SchedulePage() {
               </div>
 
               <button
-                onClick={() => removeSchedule(s.id)}
+                onClick={() => removeSchedule(s.id!)}
                 className="text-red-500"
               >
                 Delete

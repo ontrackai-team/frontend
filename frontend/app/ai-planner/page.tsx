@@ -5,11 +5,7 @@ import AppLayout from "@/components/layout/AppLayout";
 import { createStudyPlan } from "@/services/aiPlanner";
 
 export default function AIPlannerPage() {
-  const [subject, setSubject] = useState("");
-  const [daysLeft, setDaysLeft] = useState<number>(0);
-  const [hoursPerDay, setHoursPerDay] = useState<number>(0);
-
-  const [plan, setPlan] = useState<any[]>([]);
+  const [plan, setPlan] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -18,22 +14,13 @@ export default function AIPlannerPage() {
       setLoading(true);
       setError("");
 
-      const res = await createStudyPlan(
-        subject,
-        daysLeft,
-        hoursPerDay
-      );
+      // backend now generates plan from assessments (NO INPUTS NEEDED)
+      const res = await createStudyPlan();
 
-      // Gemini returns STRING → convert to JSON safely
-      const parsed =
-        typeof res.plan === "string"
-          ? JSON.parse(res.plan)
-          : res.plan;
-
-      setPlan(parsed);
-    } catch (err: any) {
+      setPlan(res.plan);
+    } catch (err) {
       console.error(err);
-      setError("Failed to generate study plan. Check backend response.");
+      setError("Failed to generate study plan. Check backend logs.");
     } finally {
       setLoading(false);
     }
@@ -48,44 +35,19 @@ export default function AIPlannerPage() {
           AI Study Planner
         </h1>
 
-        {/* INPUTS */}
-        <div className="bg-white p-4 rounded shadow space-y-3">
+        <p className="text-gray-600">
+          Generate a smart study plan from your saved assessments
+        </p>
 
-          <input
-            className="border p-2 w-full"
-            placeholder="Subject (e.g. Mathematics)"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-          />
-
-          <input
-            type="number"
-            className="border p-2 w-full"
-            placeholder="Days Left"
-            value={daysLeft}
-            onChange={(e) =>
-              setDaysLeft(Number(e.target.value))
-            }
-          />
-
-          <input
-            type="number"
-            className="border p-2 w-full"
-            placeholder="Hours per Day"
-            value={hoursPerDay}
-            onChange={(e) =>
-              setHoursPerDay(Number(e.target.value))
-            }
-          />
-
+        {/* BUTTON ONLY (NO INPUTS ANYMORE) */}
+        <div className="bg-white p-4 rounded shadow">
           <button
             onClick={handleGenerate}
-            disabled={loading || !subject}
+            disabled={loading}
             className="bg-black text-white px-4 py-2 rounded w-full"
           >
-            {loading ? "Generating..." : "Generate Plan"}
+            {loading ? "Generating Plan..." : "Generate Study Plan"}
           </button>
-
         </div>
 
         {/* ERROR */}
@@ -93,30 +55,26 @@ export default function AIPlannerPage() {
           <p className="text-red-500">{error}</p>
         )}
 
-        {/* RESULTS */}
-        <div className="space-y-3">
-
-          {plan.length === 0 && !loading && (
+        {/* RESULT */}
+        <div className="bg-white p-4 rounded shadow min-h-[200px]">
+          {loading && (
             <p className="text-gray-500">
-              No study plan generated yet.
+              AI is thinking... generating your study plan 🚀
             </p>
           )}
 
-          {plan.map((p: any, i: number) => (
-            <div
-              key={i}
-              className="bg-white p-4 rounded shadow"
-            >
-              <h3 className="font-semibold">
-                {p.title}
-              </h3>
+          {!loading && !plan && (
+            <p className="text-gray-400">
+              Your generated study plan will appear here.
+            </p>
+          )}
 
-              <p className="text-sm text-gray-500">
-                {p.date} • {p.suggested_time}
-              </p>
-            </div>
-          ))}
-
+          {/* AI OUTPUT */}
+          {plan && (
+            <pre className="whitespace-pre-wrap text-sm">
+              {plan}
+            </pre>
+          )}
         </div>
 
       </div>

@@ -2,12 +2,16 @@ from fastapi import APIRouter, Header
 from app.utils.deps import get_current_user
 from app.database import db
 from app.services.ai_service import generate_study_plan, generate_text
+from datetime import datetime
 
 router = APIRouter(prefix="/ai", tags=["AI"])
 
+schedules_collection = db["schedules"]
+assessments_collection = db["assessments"]
+
 
 # =========================
-# STUDY PLAN (FROM ASSESSMENTS)
+# STUDY PLAN (AUTO FLOW)
 # =========================
 @router.post("/study-plan")
 def study_plan(authorization: str = Header(...)):
@@ -15,35 +19,64 @@ def study_plan(authorization: str = Header(...)):
     token = authorization.replace("Bearer ", "")
     user = get_current_user(token)
 
-    # Get assessments from MongoDB
+    # 1. GET assessments
     assessments = list(
-        db["assessments"].find(
+        assessments_collection.find(
             {"user_id": user["user_id"]},
             {"_id": 0}
         )
     )
 
+    # 2. AI prompt
     prompt = f"""
     You are an AI study planner.
 
-    These are the student's assessments:
+    Based on these assessments:
     {assessments}
 
-    Create a weekly study plan.
+    Create a study plan.
 
-    Return ONLY JSON:
+    Return ONLY JSON list:
     [
-      {{
+      {
         "title": "Topic",
-        "date": "Day 1",
-        "time": "18:00"
-      }}
+        "date": "2026-06-26",
+        "duration": 2
+      }
     ]
     """
 
-    plan = generate_study_plan(prompt)
+    plan_text = generate_study_plan(prompt)
 
-    return {"plan": plan}
+    # 3. Convert AI response (IMPORTANT)
+    try:
+        import json
+        plan = json.loads(plan_text)
+    except:
+        plan = []
+
+    # 4. SAVE to schedule collection
+    saved = []
+
+    for item in plan:
+        schedule = {
+            "title": item.get("title"),
+            "date": item.get("date"),
+            "duration": item.get("duration", 1),
+            "status": "pending",
+            "user_id": user["user_id"]
+        }
+
+        result = schedules_collection.insert_one(schedule)
+        saved.append({
+            "id": str(result.inserted_id),
+            **schedule
+        })
+
+    return {
+        "message": "Study plan generated and saved",
+        "plan": saved
+    }
 
 
 # =========================
@@ -61,10 +94,9 @@ def chat(data: ChatRequest):
     prompt = f"""
     You are OnTrackAI Assistant.
 
-    Help the student based on study planning, assessments, and productivity.
+    Help the student with studying, schedules, productivity.
 
-    User message:
-    {data.message}
+    User: {data.message}
     """
 
     reply = generate_text(prompt)
