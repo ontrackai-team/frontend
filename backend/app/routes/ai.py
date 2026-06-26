@@ -147,6 +147,6 @@ def chat(data: ChatRequest, authorization: str = Header(...)):
     except Exception as e:
         return {
             "success": False,
-            "reply": "",
+            "reply": "Daily free-tier request limit reached. Please try again tomorrow.",
             "message": str(e)
         }
