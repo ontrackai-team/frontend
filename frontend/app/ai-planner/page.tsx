@@ -11,21 +11,25 @@ export default function AIPlannerPage() {
   const router = useRouter();
 
   const handleGenerate = async () => {
-    try {
-      setLoading(true);
-      setError("");
+  try {
+    setLoading(true);
+    setError("");
 
-      await createStudyPlan();
+    const res = await createStudyPlan();
 
-      // refresh schedule page (BEST FLOW)
-      router.push("/schedule");
-    } catch (err) {
-      console.error(err);
-      setError("Failed to generate study plan.");
-    } finally {
-      setLoading(false);
+    if (res.success === false) {
+      setError(res.message);
+      return;
     }
-  };
+
+    router.push("/schedule");
+  } catch (err) {
+    console.error(err);
+    setError("Failed to generate study plan.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <AppLayout>
