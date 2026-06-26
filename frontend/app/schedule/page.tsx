@@ -9,7 +9,7 @@ export default function SchedulePage() {
   if (loading) {
     return (
       <AppLayout>
-        <p className="p-6">Loading AI Schedule...</p>
+        <p className="p-6">Loading schedules...</p>
       </AppLayout>
     );
   }
@@ -18,62 +18,52 @@ export default function SchedulePage() {
     <AppLayout>
       <div className="p-6 space-y-6">
 
-        {/* HEADER */}
-        <div>
-          <h1 className="text-3xl font-bold">
-            AI Study Schedule
-          </h1>
+        <h1 className="text-3xl font-bold">
+          Your AI Study Schedule
+        </h1>
 
-          <p className="text-gray-600 mt-1">
-            Your personalized study plan generated from assessments
-          </p>
-        </div>
+        <p className="text-gray-600">
+          Automatically generated from your assessments
+        </p>
 
-        {/* EMPTY STATE */}
-        {schedules.length === 0 && (
-          <div className="bg-white p-6 rounded-xl shadow">
-            <p className="text-gray-500">
-              No AI schedule found yet.
-            </p>
-
-            <p className="text-sm text-gray-400 mt-2">
-              Go to AI Planner → Generate Study Plan
-            </p>
-          </div>
-        )}
-
-        {/* SCHEDULE LIST */}
         <div className="space-y-3">
+
+          {schedules.length === 0 && (
+            <p className="text-gray-500">
+              No AI schedule generated yet
+            </p>
+          )}
 
           {schedules.map((s: any) => (
             <div
-              key={s.id || s._id}
-              className="bg-white p-4 rounded-xl shadow flex justify-between items-center"
+              key={s.id}
+              className="bg-white p-4 rounded shadow flex justify-between"
             >
-
-              {/* LEFT CONTENT */}
               <div>
-                <h3 className="font-semibold text-lg">
+                <h3 className="font-semibold">
                   {s.title}
                 </h3>
 
-                <p className="text-sm text-gray-500 mt-1">
-                  📅 {s.date} • ⏱ {s.duration} min • 📌 {s.status}
+                <p className="text-sm text-gray-500">
+                  {s.date} • {s.duration} hour(s)
                 </p>
+
+                <span className="text-xs text-green-600">
+                  {s.status}
+                </span>
               </div>
 
-              {/* ACTION */}
               <button
-                onClick={() => removeSchedule(s.id || s._id)}
-                className="text-red-500 hover:text-red-700 text-sm"
+                onClick={() => removeSchedule(s.id)}
+                className="text-red-500"
               >
                 Delete
               </button>
-
             </div>
           ))}
 
         </div>
+
       </div>
     </AppLayout>
   );

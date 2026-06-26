@@ -50,7 +50,7 @@ export default function DashboardPage() {
 
         {/* TITLE */}
         <h1 className="text-3xl font-bold">
-          AI Dashboard 🚀
+          AI Dashboard 
         </h1>
 
         {/* STATS */}
