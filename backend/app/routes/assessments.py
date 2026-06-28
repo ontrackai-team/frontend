@@ -29,7 +29,9 @@ def create_assessment(
 
     data = assessment.dict()
     data["user_id"] = user["user_id"]
-    data["due_date"] = data["due_date"].isoformat() 
+
+    # removed isoformat() because due_date is already a string
+    # data["due_date"] = data["due_date"].isoformat()
 
     result = collection.insert_one(data)
 
