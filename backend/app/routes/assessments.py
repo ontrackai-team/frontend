@@ -20,17 +20,17 @@ collection = db["assessments"]
 # CREATE
 # ======================
 @router.post("/")
-def create_assessment(
-    assessment: AssessmentCreate,
-    authorization: str = Header(...)
-):
+def create_assessment(assessment: AssessmentCreate, authorization: str = Header(...)):
+
     token = authorization.replace("Bearer ", "")
     user = get_current_user(token)
 
     data = assessment.dict()
+
     data["user_id"] = user["user_id"]
 
-
+    # 🔥 FORCE STRING ALWAYS
+    data["due_date"] = str(data["due_date"])
 
     result = collection.insert_one(data)
 
@@ -82,8 +82,9 @@ def update_assessment(
 
     data = assessment.dict(exclude_unset=True)
 
+    # ✅ ADD THIS HERE
     if "due_date" in data:
-        data["due_date"] = data["due_date"].isoformat()
+        data["due_date"] = str(data["due_date"])
 
     result = collection.update_one(
         {
@@ -100,7 +101,6 @@ def update_assessment(
         )
 
     return {"message": "Updated"}
-
 
 # ======================
 # DELETE
