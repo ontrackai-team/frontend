@@ -22,3 +22,10 @@ export const registerUser = async (data: RegisterData) => {
   const res = await API.post("/auth/register", data);
   return res.data;
 };
+// =========================
+// GET CURRENT USER (PROFILE HEADER)
+// =========================
+export const getMe = async () => {
+  const { data } = await API.get("/auth/me");
+  return data;
+};
