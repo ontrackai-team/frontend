@@ -84,10 +84,13 @@ export default function Sidebar() {
         {/* NAVIGATION */}
         <nav className="flex flex-col gap-2">
 
-          <Link href="/dashboard" className="nav">
-            <LayoutDashboard size={20} />
-            Dashboard
-          </Link>
+        <Link
+  href="/dashboard"
+  className="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-300 transition-all duration-200 hover:bg-white/10 hover:text-white hover:translate-x-1"
+>
+  <LayoutDashboard size={20} />
+  <span className="text-sm font-medium">Dashboard</span>
+</Link>
 
           <Link href="/assessments" className="nav">
             <ClipboardCheck size={20} />
