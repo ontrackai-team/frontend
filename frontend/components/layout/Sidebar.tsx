@@ -92,35 +92,53 @@ export default function Sidebar() {
   <span className="text-sm font-medium">Dashboard</span>
 </Link>
 
-          <Link href="/assessments" className="nav">
-            <ClipboardCheck size={20} />
-            Assessments
-          </Link>
+        <Link
+  href="/assessments"
+  className="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-300 transition-all duration-200 hover:bg-white/10 hover:text-white hover:translate-x-1"
+>
+  <ClipboardCheck size={20} />
+  <span className="text-sm font-medium">Assessments</span>
+</Link>
 
-          <Link href="/schedule" className="nav">
-            <CalendarDays size={20} />
-            Schedules
-          </Link>
+        <Link
+  href="/schedule"
+  className="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-300 transition-all duration-200 hover:bg-white/10 hover:text-white hover:translate-x-1"
+>
+  <CalendarDays size={20} />
+  <span className="text-sm font-medium">Schedules</span>
+</Link>
 
-          <Link href="/chat" className="nav">
-            <MessageSquare size={20} />
-            AI Chat
-          </Link>
+        <Link
+  href="/chat"
+  className="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-300 transition-all duration-200 hover:bg-white/10 hover:text-white hover:translate-x-1"
+>
+  <MessageSquare size={20} />
+  <span className="text-sm font-medium">AI Chat</span>
+</Link>
 
-          <Link href="/ai-planner" className="nav">
-            <Brain size={20} />
-            AI Planner
-          </Link>
+          <Link
+  href="/ai-planner"
+  className="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-300 transition-all duration-200 hover:bg-white/10 hover:text-white hover:translate-x-1"
+>
+  <Brain size={20} />
+  <span className="text-sm font-medium">AI Planner</span>
+</Link>
 
-          <Link href="/profile" className="nav">
-            <User size={20} />
-            Profile
-          </Link>
+        <Link
+  href="/profile"
+  className="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-300 transition-all duration-200 hover:bg-white/10 hover:text-white hover:translate-x-1"
+>
+  <User size={20} />
+  <span className="text-sm font-medium">Profile</span>
+</Link>
 
-          <Link href="/settings" className="nav">
-            <Settings size={20} />
-            Settings
-          </Link>
+        <Link
+  href="/settings"
+  className="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-300 transition-all duration-200 hover:bg-white/10 hover:text-white hover:translate-x-1"
+>
+  <Settings size={20} />
+  <span className="text-sm font-medium">Settings</span>
+</Link>
 
         </nav>
 
