@@ -92,112 +92,66 @@ export default function SettingsPage() {
           </div>
         )}
 
-        {/* Account */}
+     
+
+         {/* PROFILE CARD */}
 
         <div className="rounded-2xl bg-white p-8 shadow">
-
-          <h2 className="mb-6 flex items-center gap-2 text-xl font-bold">
-            <User size={22}/>
-            Account
-          </h2>
 
           <div className="flex items-center gap-6">
 
             <img
               src={
                 profile.avatar ||
-                `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}`
+                `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                  user.name || "User"
+                )}&background=4f46e5&color=fff`
               }
-              className="h-24 w-24 rounded-full border object-cover"
+              alt="Avatar"
+              className="h-28 w-28 rounded-full border-4 border-indigo-100 object-cover"
             />
 
             <div>
 
-              <h3 className="text-xl font-bold">
+              <h2 className="text-2xl font-bold">
                 {user.name}
-              </h3>
+              </h2>
 
-              <p className="flex items-center gap-2 text-gray-500">
-                <Mail size={16}/>
+              <p className="text-gray-500">
                 {user.email}
               </p>
+
+              <span className="mt-3 inline-block rounded-full bg-indigo-100 px-4 py-1 text-sm font-medium text-indigo-700">
+                {profile.level}
+              </span>
 
             </div>
 
           </div>
 
-        </div>
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
 
-        {/* Preferences */}
+            <div className="rounded-xl border p-5">
 
-        <div className="rounded-2xl bg-white p-8 shadow">
-
-          <h2 className="mb-6 flex items-center gap-2 text-xl font-bold">
-            <Target size={22}/>
-            Study Preferences
-          </h2>
-
-          <div className="space-y-5">
-
-            <div>
-
-              <label className="mb-2 block font-medium">
-                Goal
-              </label>
-
-              <input
-                value={profile.goal}
-                onChange={(e)=>
-                  setProfile({
-                    ...profile,
-                    goal:e.target.value
-                  })
-                }
-                className="w-full rounded-xl border p-3"
-              />
-
-            </div>
-
-            <div>
-
-              <label className="mb-2 block font-medium">
+              <h3 className="mb-2 font-semibold text-gray-700">
                 Bio
-              </label>
+              </h3>
 
-              <textarea
-                rows={4}
-                value={profile.bio}
-                onChange={(e)=>
-                  setProfile({
-                    ...profile,
-                    bio:e.target.value
-                  })
-                }
-                className="w-full rounded-xl border p-3"
-              />
+              <p className="text-gray-600">
+                {profile.bio || "No bio added yet."}
+              </p>
 
             </div>
 
-            <div>
+            <div className="rounded-xl border p-5">
 
-              <label className="mb-2 block font-medium">
-                Learning Level
-              </label>
+              <h3 className="mb-2 font-semibold text-gray-700">
+                Goal
+              </h3>
 
-              <select
-                value={profile.level}
-                onChange={(e)=>
-                  setProfile({
-                    ...profile,
-                    level:e.target.value
-                  })
-                }
-                className="w-full rounded-xl border p-3"
-              >
-                <option>Beginner</option>
-                <option>Intermediate</option>
-                <option>Advanced</option>
-              </select>
+              <p className="text-gray-600">
+                {profile.goal || "No goal set yet."}
+              </p>
 
             </div>
 
