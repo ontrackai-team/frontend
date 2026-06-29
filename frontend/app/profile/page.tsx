@@ -34,8 +34,8 @@ export default function ProfilePage() {
       ]);
 
       setUser({
-        name: userData.name,
-        email: userData.email,
+        name: userData.name || "",
+        email: userData.email || "",
       });
 
       setProfile({
@@ -56,18 +56,11 @@ export default function ProfilePage() {
       setSaving(true);
       setMessage("");
 
-      const res = await updateProfile(profile);
-
-      setProfile({
-        bio: res.profile.bio || "",
-        goal: res.profile.goal || "",
-        avatar: res.profile.avatar || "",
-        level: res.profile.level || "Beginner",
-      });
-
-      setMessage(res.message);
+      await updateProfile(profile);
 
       await loadData();
+
+      setMessage("Profile updated successfully!");
     } catch (err) {
       console.error(err);
       setMessage("Failed to update profile.");
@@ -79,40 +72,44 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <AppLayout>
-        <div className="p-6">Loading profile...</div>
+        <div className="p-8">Loading profile...</div>
       </AppLayout>
     );
   }
 
   return (
     <AppLayout>
-      <div className="max-w-4xl mx-auto p-8">
+      <div className="mx-auto max-w-5xl space-y-8 p-8">
 
-        <h1 className="text-3xl font-bold mb-8">
+        <h1 className="text-3xl font-bold">
           My Profile
         </h1>
 
         {message && (
-          <div className="mb-6 rounded-lg bg-green-100 text-green-700 p-4">
+          <div className="rounded-xl bg-green-100 p-4 text-green-700">
             {message}
           </div>
         )}
 
-        <div className="bg-white rounded-2xl shadow-lg p-8">
+        {/* PROFILE CARD */}
 
-          {/* Header */}
-          <div className="flex items-center gap-6 mb-8">
+        <div className="rounded-2xl bg-white p-8 shadow">
+
+          <div className="flex items-center gap-6">
 
             <img
               src={
                 profile.avatar ||
-                "https://ui-avatars.com/api/?name=" +
-                  encodeURIComponent(user.name)
+                `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                  user.name || "User"
+                )}&background=4f46e5&color=fff`
               }
-              className="w-24 h-24 rounded-full object-cover border"
+              alt="Avatar"
+              className="h-28 w-28 rounded-full border-4 border-indigo-100 object-cover"
             />
 
             <div>
+
               <h2 className="text-2xl font-bold">
                 {user.name}
               </h2>
@@ -121,17 +118,57 @@ export default function ProfilePage() {
                 {user.email}
               </p>
 
-              <span className="inline-block mt-2 rounded-full bg-indigo-100 px-4 py-1 text-indigo-700 text-sm">
+              <span className="mt-3 inline-block rounded-full bg-indigo-100 px-4 py-1 text-sm font-medium text-indigo-700">
                 {profile.level}
               </span>
+
             </div>
 
           </div>
 
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+
+            <div className="rounded-xl border p-5">
+
+              <h3 className="mb-2 font-semibold text-gray-700">
+                Bio
+              </h3>
+
+              <p className="text-gray-600">
+                {profile.bio || "No bio added yet."}
+              </p>
+
+            </div>
+
+            <div className="rounded-xl border p-5">
+
+              <h3 className="mb-2 font-semibold text-gray-700">
+                Goal
+              </h3>
+
+              <p className="text-gray-600">
+                {profile.goal || "No goal set yet."}
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* EDIT FORM */}
+
+        <div className="rounded-2xl bg-white p-8 shadow">
+
+          <h2 className="mb-6 text-2xl font-bold">
+            Edit Profile
+          </h2>
+
           <div className="space-y-6">
 
             <div>
-              <label className="font-semibold block mb-2">
+
+              <label className="mb-2 block font-semibold">
                 Bio
               </label>
 
@@ -144,12 +181,14 @@ export default function ProfilePage() {
                     bio: e.target.value,
                   })
                 }
-                className="w-full rounded-lg border p-3"
+                className="w-full rounded-xl border p-3"
               />
+
             </div>
 
             <div>
-              <label className="font-semibold block mb-2">
+
+              <label className="mb-2 block font-semibold">
                 Goal
               </label>
 
@@ -161,12 +200,14 @@ export default function ProfilePage() {
                     goal: e.target.value,
                   })
                 }
-                className="w-full rounded-lg border p-3"
+                className="w-full rounded-xl border p-3"
               />
+
             </div>
 
             <div>
-              <label className="font-semibold block mb-2">
+
+              <label className="mb-2 block font-semibold">
                 Avatar URL
               </label>
 
@@ -178,12 +219,14 @@ export default function ProfilePage() {
                     avatar: e.target.value,
                   })
                 }
-                className="w-full rounded-lg border p-3"
+                className="w-full rounded-xl border p-3"
               />
+
             </div>
 
             <div>
-              <label className="font-semibold block mb-2">
+
+              <label className="mb-2 block font-semibold">
                 Level
               </label>
 
@@ -195,18 +238,19 @@ export default function ProfilePage() {
                     level: e.target.value,
                   })
                 }
-                className="w-full rounded-lg border p-3"
+                className="w-full rounded-xl border p-3"
               >
                 <option>Beginner</option>
                 <option>Intermediate</option>
                 <option>Advanced</option>
               </select>
+
             </div>
 
             <button
               onClick={handleSave}
               disabled={saving}
-              className="w-full rounded-xl bg-indigo-600 py-3 text-white font-semibold hover:bg-indigo-700 transition"
+              className="w-full rounded-xl bg-indigo-600 py-3 font-semibold text-white transition hover:bg-indigo-700"
             >
               {saving ? "Saving..." : "Save Changes"}
             </button>
@@ -214,6 +258,7 @@ export default function ProfilePage() {
           </div>
 
         </div>
+
       </div>
     </AppLayout>
   );
